@@ -50,9 +50,15 @@ lvgl:
             value: !lambda 'return id(battery_soc);'
             bg_color: 0x222222
             bg_opa: cover
-            line_width: 35          # товщина фону + індикатора
-            line_color: 0x444444    # колір фону дуги
-            line_color_indicator: !lambda 'return id(battery_soc) > 50 ? 0x00FF00 : (id(battery_soc) > 20 ? 0xFFFF00 : 0xFF0000);'
+            line_width: 35
+            line_color: 0x444444   # колір фону дуги
+            styles: arc_indicator_style   # динамічний колір індикатора
+
+        # Стиль для індикатора дуги (динамічний колір)
+        styles:
+          - id: arc_indicator_style
+            line_color: !lambda 'return id(battery_soc) > 50 ? 0x00FF00 : (id(battery_soc) > 20 ? 0xFFFF00 : 0xFF0000);'
+            part: indicator
 
         # Великий відсоток SOC в центрі дуги
         - label:
@@ -63,7 +69,7 @@ lvgl:
             text_color: 0xFFFFFF
             text: !lambda 'return String(id(battery_soc), 1) + "%";'
 
-        # Додаткові параметри під дугою
+        # Параметри під дугою
         - label:
             id: battery_voltage_label
             align: top_mid
@@ -96,7 +102,7 @@ lvgl:
             text_color: !lambda 'return id(battery_soc) > 0 ? 0x00FF00 : 0xFF0000;'
             text: !lambda 'return id(battery_status).c_str();'
 
-        # Кнопка ручного оновлення
+        # Кнопка ручного оновлення даних батареї
         - button:
             height: $button_height_single
             width: $button_width
