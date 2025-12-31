@@ -51,16 +51,10 @@ lvgl:
             bg_color: 0x222222
             bg_opa: cover
             line_width: 35
-            line_color: 0x444444   # колір фону дуги
-            styles: arc_indicator_style   # динамічний колір індикатора
+            line_color: 0x444444   # фон дуги
+            indicator_line_color: 0x00FF00   # індикатор зелений (можна змінити на 0xFFFF00 або 0xFF0000)
 
-        # Стиль для індикатора дуги (динамічний колір)
-        styles:
-          - id: arc_indicator_style
-            line_color: !lambda 'return id(battery_soc) > 50 ? 0x00FF00 : (id(battery_soc) > 20 ? 0xFFFF00 : 0xFF0000);'
-            part: indicator
-
-        # Великий відсоток SOC в центрі дуги
+        # Великий відсоток SOC в центрі
         - label:
             id: battery_soc_label
             align: top_mid
@@ -102,7 +96,7 @@ lvgl:
             text_color: !lambda 'return id(battery_soc) > 0 ? 0x00FF00 : 0xFF0000;'
             text: !lambda 'return id(battery_status).c_str();'
 
-        # Кнопка ручного оновлення даних батареї
+        # Кнопка ручного оновлення
         - button:
             height: $button_height_single
             width: $button_width
@@ -120,7 +114,6 @@ lvgl:
               - interval.trigger: pylontech_update
 
         # ==================== ІСНУЮЧІ КНОПКИ ====================
-        # Office Features Scene
         - button:
             height: $button_height_single
             width: $button_width
@@ -143,7 +136,6 @@ lvgl:
                   data:
                     entity_id: scene.office_features
 
-        # Office Calls Scene
         - button:
             height: $button_height_single
             width: $button_width
@@ -166,7 +158,6 @@ lvgl:
                   data:
                     entity_id: scene.office_desk_call
 
-        # Office Evening Scene
         - button:
             height: $button_height_single
             width: $button_width
@@ -189,7 +180,6 @@ lvgl:
                   data:
                     entity_id: scene.office_evening
 
-        # Office Dimmed Scene
         - button:
             height: $button_height_single
             width: $button_width
@@ -212,7 +202,6 @@ lvgl:
                   data:
                     entity_id: scene.office_dimmed
 
-        # Office Blind 100%
         - button:
             height: $button_height_single
             width: $button_width
@@ -234,7 +223,6 @@ lvgl:
                     entity_id: cover.office_blind
                     position: "100"
 
-        # Office Blind 66%
         - button:
             height: $button_height_single
             width: $button_width
@@ -256,7 +244,6 @@ lvgl:
                     entity_id: cover.office_blind
                     position: "66"
 
-        # Office Blind 33%
         - button:
             height: $button_height_single
             width: $button_width
@@ -278,7 +265,6 @@ lvgl:
                     entity_id: cover.office_blind
                     position: "33"
 
-        # Office Blind 0%
         - button:
             height: $button_height_single
             width: $button_width
@@ -300,7 +286,6 @@ lvgl:
                     entity_id: cover.office_blind
                     position: "0"
 
-        # 3d Printer
         - button:
             height: $button_height_single
             width: $button_width
@@ -323,7 +308,6 @@ lvgl:
                   data:
                     entity_id: switch.office_3d_printer_power
 
-        # Filament Heater
         - button:
             height: $button_height_single
             width: $button_width
@@ -346,7 +330,6 @@ lvgl:
                   data:
                     entity_id: switch.office_filament_heater_893b
 
-        # Office Aircon
         - button:
             height: $button_height_single
             width: $button_width
@@ -365,7 +348,6 @@ lvgl:
               - homeassistant.service:
                   service: script.office_air_conditioner
 
-        # Battery Charger
         - button:
             height: $button_height_single
             width: $button_width
@@ -388,7 +370,6 @@ lvgl:
                   data:
                     entity_id: switch.d4c5
 
-        # Storage Lights
         - button:
             height: $button_height_single
             width: $button_width
@@ -411,7 +392,6 @@ lvgl:
                   data:
                     entity_id: light.office_storage
 
-        # Network Rack
         - button:
             height: $button_height_single
             width: $button_width
