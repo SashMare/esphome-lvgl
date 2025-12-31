@@ -1,7 +1,7 @@
 lvgl:
   top_layer:
     widgets:
-    
+   
       # Temperature
       - label:
           text: "-° / -°"
@@ -11,7 +11,6 @@ lvgl:
           x: 8
           y: 4
           text_color: 0xFFFFFF
-
       # Clock
       - label:
           text: "--:--"
@@ -22,10 +21,10 @@ lvgl:
           y: 4
           text_align: center
           text_color: 0xFFFFFF
-          
+         
   pages:
     - id: main_page
-      layout: 
+      layout:
         type: flex
         flex_flow: column_wrap
       width: 100%
@@ -35,11 +34,89 @@ lvgl:
       pad_bottom: 5
       pad_left: 5
       pad_right: 5
-      
+     
       widgets:
-      
+     
+        # ==================== PYLONTECH BATTERY SECTION ====================
+        # Велика дуга SOC
+        - arc:
+            id: battery_arc
+            align: top_mid
+            width: 300
+            height: 300
+            rotation: 135
+            range_from: 0
+            range_to: 100
+            value: !lambda 'return id(battery_soc);'
+            bg_color: 0x222222
+            bg_opa: cover
+            line_width: 35
+            line_color: 0x444444
+            indicator_line_width: 35
+            indicator_line_color: !lambda 'return id(battery_soc) > 50 ? 0x00FF00 : (id(battery_soc) > 20 ? 0xFFFF00 : 0xFF0000);'
+
+        # Великий відсоток SOC в центрі дуги
+        - label:
+            id: battery_soc_label
+            align: top_mid
+            y: -50
+            text_font: montserrat_48
+            text_color: 0xFFFFFF
+            text: !lambda 'return String(id(battery_soc), 1) + "%";'
+
+        # Додаткові параметри під дугою
+        - label:
+            id: battery_voltage_label
+            align: top_mid
+            y: 110
+            text_font: roboto15_style
+            text_color: 0xFFFFFF
+            text: !lambda 'return "Напруга: " + String(id(battery_voltage), 2) + " В";'
+
+        - label:
+            id: battery_current_label
+            align: top_mid
+            y: 140
+            text_font: roboto15_style
+            text_color: 0xFFFFFF
+            text: !lambda 'return "Струм: " + String(id(battery_current), 2) + " А";'
+
+        - label:
+            id: battery_temp_label
+            align: top_mid
+            y: 170
+            text_font: roboto15_style
+            text_color: 0xFFFFFF
+            text: !lambda 'return "Темп: " + String(id(battery_temp), 1) + " °C";'
+
+        - label:
+            id: battery_status_label
+            align: top_mid
+            y: 200
+            text_font: roboto15_style
+            text_color: !lambda 'return id(battery_soc) > 0 ? 0x00FF00 : 0xFF0000;'
+            text: !lambda 'return id(battery_status).c_str();'
+
+        # Кнопка ручного оновлення даних батареї
+        - button:
+            height: $button_height_single
+            width: $button_width
+            checkable: false
+            styles: control
+            widgets:
+              - label:
+                  text_font: $icon_font
+                  align: top_left
+                  text: $battery
+              - label:
+                  align: bottom_left
+                  text: "Оновити батарею"
+            on_click:
+              - interval.trigger: pylontech_update   # тригерить запит одразу
+
+        # ==================== ІСНУЮЧІ КНОПКИ ====================
         # Office Features Scene
-        - button: 
+        - button:
             height: $button_height_single
             width: $button_width
             checkable: false
@@ -49,7 +126,7 @@ lvgl:
               - label:
                   text_font: $icon_font
                   align: top_left
-                  id: scene_features_icon                
+                  id: scene_features_icon
                   text: $ledstrip
               - label:
                   align: bottom_left
@@ -62,7 +139,7 @@ lvgl:
                     entity_id: scene.office_features
 
         # Office Calls Scene
-        - button: 
+        - button:
             height: $button_height_single
             width: $button_width
             checkable: false
@@ -72,7 +149,7 @@ lvgl:
               - label:
                   text_font: $icon_font
                   align: top_left
-                  id: office_scene_calls_icon                
+                  id: office_scene_calls_icon
                   text: $videocall
               - label:
                   align: bottom_left
@@ -85,7 +162,7 @@ lvgl:
                     entity_id: scene.office_desk_call
 
         # Office Evening Scene
-        - button: 
+        - button:
             height: $button_height_single
             width: $button_width
             checkable: false
@@ -95,7 +172,7 @@ lvgl:
               - label:
                   text_font: $icon_font
                   align: top_left
-                  id: office_scene_evening_icon                
+                  id: office_scene_evening_icon
                   text: $nightlight
               - label:
                   align: bottom_left
@@ -108,7 +185,7 @@ lvgl:
                     entity_id: scene.office_evening
 
         # Office Dimmed Scene
-        - button: 
+        - button:
             height: $button_height_single
             width: $button_width
             checkable: false
@@ -118,7 +195,7 @@ lvgl:
               - label:
                   text_font: $icon_font
                   align: top_left
-                  id: office_scene_dimmed_icon                
+                  id: office_scene_dimmed_icon
                   text: $nightlight
               - label:
                   align: bottom_left
@@ -131,7 +208,7 @@ lvgl:
                     entity_id: scene.office_dimmed
 
         # Office Blind 100%
-        - button: 
+        - button:
             height: $button_height_single
             width: $button_width
             checkable: true
@@ -153,7 +230,7 @@ lvgl:
                     position: "100"
 
         # Office Blind 66%
-        - button: 
+        - button:
             height: $button_height_single
             width: $button_width
             checkable: true
@@ -175,7 +252,7 @@ lvgl:
                     position: "66"
 
         # Office Blind 33%
-        - button: 
+        - button:
             height: $button_height_single
             width: $button_width
             checkable: true
@@ -197,7 +274,7 @@ lvgl:
                     position: "33"
 
         # Office Blind 0%
-        - button: 
+        - button:
             height: $button_height_single
             width: $button_width
             checkable: true
@@ -218,9 +295,8 @@ lvgl:
                     entity_id: cover.office_blind
                     position: "0"
 
-
         # 3d Printer
-        - button: 
+        - button:
             height: $button_height_single
             width: $button_width
             checkable: true
@@ -243,7 +319,7 @@ lvgl:
                     entity_id: switch.office_3d_printer_power
 
         # Filament Heater
-        - button: 
+        - button:
             height: $button_height_single
             width: $button_width
             checkable: true
@@ -266,7 +342,7 @@ lvgl:
                     entity_id: switch.office_filament_heater_893b
 
         # Office Aircon
-        - button: 
+        - button:
             height: $button_height_single
             width: $button_width
             checkable: true
@@ -285,7 +361,7 @@ lvgl:
                   service: script.office_air_conditioner
 
         # Battery Charger
-        - button: 
+        - button:
             height: $button_height_single
             width: $button_width
             checkable: true
@@ -308,7 +384,7 @@ lvgl:
                     entity_id: switch.d4c5
 
         # Storage Lights
-        - button: 
+        - button:
             height: $button_height_single
             width: $button_width
             checkable: true
@@ -331,7 +407,7 @@ lvgl:
                     entity_id: light.office_storage
 
         # Network Rack
-        - button: 
+        - button:
             height: $button_height_single
             width: $button_width
             checkable: true
