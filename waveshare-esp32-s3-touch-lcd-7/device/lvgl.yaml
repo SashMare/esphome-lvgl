@@ -62,7 +62,7 @@ lvgl:
             id: battery_voltage_label
             align: LV_ALIGN_TOP_MID
             y: 110
-            text_font: roboto_15   # правильний font, а не style
+            text_font: roboto15_font   # правильний шрифт з репозиторію
             text_color: 0xFFFFFF
             text: !lambda 'return "Напруга: " + String(id(battery_voltage), 2) + " В";'
 
@@ -70,7 +70,7 @@ lvgl:
             id: battery_current_label
             align: LV_ALIGN_TOP_MID
             y: 140
-            text_font: roboto_15
+            text_font: roboto15_font
             text_color: 0xFFFFFF
             text: !lambda 'return "Струм: " + String(id(battery_current), 2) + " А";'
 
@@ -78,7 +78,7 @@ lvgl:
             id: battery_temp_label
             align: LV_ALIGN_TOP_MID
             y: 170
-            text_font: roboto_15
+            text_font: roboto15_font
             text_color: 0xFFFFFF
             text: !lambda 'return "Темп: " + String(id(battery_temp), 1) + " °C";'
 
@@ -86,7 +86,7 @@ lvgl:
             id: battery_status_label
             align: LV_ALIGN_TOP_MID
             y: 200
-            text_font: roboto_15
+            text_font: roboto15_font
             text_color: !lambda 'return id(battery_soc) > 0 ? 0x00FF00 : 0xFF0000;'
             text: !lambda 'return id(battery_status).c_str();'
 
