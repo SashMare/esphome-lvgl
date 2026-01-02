@@ -52,7 +52,7 @@ lvgl:
             bg_opa: cover
             line_width: 35
             line_color: 0x444444   # фон дуги
-            indicator_line_color: 0x00FF00   # індикатор зелений (можна змінити на 0xFFFF00 або 0xFF0000)
+            indicator_color: 0x00FF00   # індикатор зелений (можна змінити на 0xFFFF00 жовтий або 0xFF0000 червоний)
 
         # Великий відсоток SOC в центрі
         - label:
