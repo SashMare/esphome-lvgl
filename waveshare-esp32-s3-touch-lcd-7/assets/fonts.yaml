@@ -34,10 +34,3 @@ font:
     size: 48
     bpp: 4
     glyphs: "0123456789.%АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯабвгґдеєжзиіїйклмнопрстуфхцчшщьюя"
-
-  - file: "fonts/MaterialIcons-Regular.ttf"
-    id: icon_font
-    size: 24
-    bpp: 4
-    glyphs: "$aircon$blinds_closed$blinds_open$battery$filament$ledstrip$network$nightlight$package$printer$videocall"
-    ignore_missing_glyphs: true   # ← це виправляє проблему з компіляцією
