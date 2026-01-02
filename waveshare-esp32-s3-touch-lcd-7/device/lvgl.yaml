@@ -56,15 +56,21 @@ lvgl:
             y: -50
             text_font: montserrat_48
             text_color: 0xFFFFFF
-            text: !lambda 'return String(id(battery_soc), 1) + "%";'
+            text: !lambda |-
+              char buf[10];
+              snprintf(buf, sizeof(buf), "%.1f%%", id(battery_soc));
+              return buf;
 
         - label:
             id: battery_voltage_label
             align: LV_ALIGN_TOP_MID
             y: 110
-            text_font: roboto15_font   # правильний шрифт з репозиторію
+            text_font: roboto15_font
             text_color: 0xFFFFFF
-            text: !lambda 'return "Напруга: " + String(id(battery_voltage), 2) + " В";'
+            text: !lambda |-
+              char buf[20];
+              snprintf(buf, sizeof(buf), "Напруга: %.2f В", id(battery_voltage));
+              return buf;
 
         - label:
             id: battery_current_label
@@ -72,7 +78,10 @@ lvgl:
             y: 140
             text_font: roboto15_font
             text_color: 0xFFFFFF
-            text: !lambda 'return "Струм: " + String(id(battery_current), 2) + " А";'
+            text: !lambda |-
+              char buf[20];
+              snprintf(buf, sizeof(buf), "Струм: %.2f А", id(battery_current));
+              return buf;
 
         - label:
             id: battery_temp_label
@@ -80,14 +89,17 @@ lvgl:
             y: 170
             text_font: roboto15_font
             text_color: 0xFFFFFF
-            text: !lambda 'return "Темп: " + String(id(battery_temp), 1) + " °C";'
+            text: !lambda |-
+              char buf[20];
+              snprintf(buf, sizeof(buf), "Темп: %.1f °C", id(battery_temp));
+              return buf;
 
         - label:
             id: battery_status_label
             align: LV_ALIGN_TOP_MID
             y: 200
             text_font: roboto15_font
-            text_color: !lambda 'return id(battery_soc) > 0 ? 0x00FF00 : 0xFF0000;'
+            text_color: !lambda 'return id(battery_soc) > 0 ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
             text: !lambda 'return id(battery_status).c_str();'
 
         - button:
