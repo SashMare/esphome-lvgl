@@ -1,46 +1,42 @@
 lvgl:
   top_layer:
     widgets:
-   
-      # Temperature
       - label:
           text: "-° / -°"
           id: temperatures
           styles: roboto15_style
-          align: top_left
+          align: LV_ALIGN_TOP_LEFT
           x: 8
           y: 4
           text_color: 0xFFFFFF
-      # Clock
       - label:
           text: "--:--"
           id: display_time
           styles: roboto15_style
-          align: top_mid
+          align: LV_ALIGN_TOP_MID
           x: 0
           y: 4
-          text_align: center
+          text_align: LV_TEXT_ALIGN_CENTER
           text_color: 0xFFFFFF
-         
+
   pages:
     - id: main_page
       layout:
         type: flex
-        flex_flow: column_wrap
-      width: 100%
-      bg_color: Black
-      bg_opa: cover
+        flex_flow: LV_FLEX_FLOW_COLUMN_WRAP
+      width: lv_pct(100)
+      bg_color: black
+      bg_opa: LV_OPA_COVER
       pad_top: 30
       pad_bottom: 5
       pad_left: 5
       pad_right: 5
-     
+
       widgets:
-     
         # ==================== PYLONTECH BATTERY SECTION ====================
         - arc:
             id: battery_arc
-            align: top_mid
+            align: LV_ALIGN_TOP_MID
             width: 300
             height: 300
             rotation: 135
@@ -48,15 +44,15 @@ lvgl:
             max_value: 100
             value: !lambda 'return id(battery_soc);'
             bg_color: 0x222222
-            bg_opa: cover
+            bg_opa: LV_OPA_COVER
             line_width: 35
             line_color: 0x444444
             indicator:
-              arc_color: 0x00FF00   # зелений індикатор
+              arc_color: 0x00FF00
 
         - label:
             id: battery_soc_label
-            align: top_mid
+            align: LV_ALIGN_TOP_MID
             y: -50
             text_font: montserrat_48
             text_color: 0xFFFFFF
@@ -64,37 +60,36 @@ lvgl:
 
         - label:
             id: battery_voltage_label
-            align: top_mid
+            align: LV_ALIGN_TOP_MID
             y: 110
-            text_font: roboto15_style
+            text_font: roboto_15   # правильний font, а не style
             text_color: 0xFFFFFF
             text: !lambda 'return "Напруга: " + String(id(battery_voltage), 2) + " В";'
 
         - label:
             id: battery_current_label
-            align: top_mid
+            align: LV_ALIGN_TOP_MID
             y: 140
-            text_font: roboto15_style
+            text_font: roboto_15
             text_color: 0xFFFFFF
             text: !lambda 'return "Струм: " + String(id(battery_current), 2) + " А";'
 
         - label:
             id: battery_temp_label
-            align: top_mid
+            align: LV_ALIGN_TOP_MID
             y: 170
-            text_font: roboto15_style
+            text_font: roboto_15
             text_color: 0xFFFFFF
             text: !lambda 'return "Темп: " + String(id(battery_temp), 1) + " °C";'
 
         - label:
             id: battery_status_label
-            align: top_mid
+            align: LV_ALIGN_TOP_MID
             y: 200
-            text_font: roboto15_style
+            text_font: roboto_15
             text_color: !lambda 'return id(battery_soc) > 0 ? 0x00FF00 : 0xFF0000;'
             text: !lambda 'return id(battery_status).c_str();'
 
-        # Кнопка оновлення (тепер працює)
         - button:
             height: $button_height_single
             width: $button_width
@@ -103,15 +98,15 @@ lvgl:
             widgets:
               - label:
                   text_font: $icon_font
-                  align: top_left
+                  align: LV_ALIGN_TOP_LEFT
                   text: $battery
               - label:
-                  align: bottom_left
+                  align: LV_ALIGN_BOTTOM_LEFT
                   text: "Оновити батарею"
             on_click:
-              - component.update: pylontech_update   # правильний синтаксис
+              - component.update: pylontech_update
 
-        # ==================== ВСІ ТВОЇ ОРИГІНАЛЬНІ КНОПКИ ====================
+        # ==================== ІСНУЮЧІ КНОПКИ ====================
         - button:
             height: $button_height_single
             width: $button_width
@@ -121,11 +116,11 @@ lvgl:
             widgets:
               - label:
                   text_font: $icon_font
-                  align: top_left
+                  align: LV_ALIGN_TOP_LEFT
                   id: scene_features_icon
                   text: $ledstrip
               - label:
-                  align: bottom_left
+                  align: LV_ALIGN_BOTTOM_LEFT
                   id: scene_features_label
                   text: "Features"
             on_press:
@@ -143,11 +138,11 @@ lvgl:
             widgets:
               - label:
                   text_font: $icon_font
-                  align: top_left
+                  align: LV_ALIGN_TOP_LEFT
                   id: office_scene_calls_icon
                   text: $videocall
               - label:
-                  align: bottom_left
+                  align: LV_ALIGN_BOTTOM_LEFT
                   id: office_scene_calls_label
                   text: "Calls"
             on_press:
@@ -165,11 +160,11 @@ lvgl:
             widgets:
               - label:
                   text_font: $icon_font
-                  align: top_left
+                  align: LV_ALIGN_TOP_LEFT
                   id: office_scene_evening_icon
                   text: $nightlight
               - label:
-                  align: bottom_left
+                  align: LV_ALIGN_BOTTOM_LEFT
                   id: office_scene_evening_label
                   text: "Evening"
             on_press:
@@ -187,11 +182,11 @@ lvgl:
             widgets:
               - label:
                   text_font: $icon_font
-                  align: top_left
+                  align: LV_ALIGN_TOP_LEFT
                   id: office_scene_dimmed_icon
                   text: $nightlight
               - label:
-                  align: bottom_left
+                  align: LV_ALIGN_BOTTOM_LEFT
                   id: office_scene_dimmed_label
                   text: "Dimmed"
             on_press:
@@ -209,10 +204,10 @@ lvgl:
             widgets:
               - label:
                   text_font: $icon_font
-                  align: top_left
+                  align: LV_ALIGN_TOP_LEFT
                   text: $blinds_open
               - label:
-                  align: bottom_left
+                  align: LV_ALIGN_BOTTOM_LEFT
                   text: "Open"
             on_click:
               - homeassistant.service:
@@ -230,10 +225,10 @@ lvgl:
             widgets:
               - label:
                   text_font: $icon_font
-                  align: top_left
+                  align: LV_ALIGN_TOP_LEFT
                   text: $blinds_open
               - label:
-                  align: bottom_left
+                  align: LV_ALIGN_BOTTOM_LEFT
                   text: "Semi Open"
             on_click:
               - homeassistant.service:
@@ -251,10 +246,10 @@ lvgl:
             widgets:
               - label:
                   text_font: $icon_font
-                  align: top_left
+                  align: LV_ALIGN_TOP_LEFT
                   text: $blinds_open
               - label:
-                  align: bottom_left
+                  align: LV_ALIGN_BOTTOM_LEFT
                   text: "Semi Closed"
             on_click:
               - homeassistant.service:
@@ -272,10 +267,10 @@ lvgl:
             widgets:
               - label:
                   text_font: $icon_font
-                  align: top_left
+                  align: LV_ALIGN_TOP_LEFT
                   text: $blinds_closed
               - label:
-                  align: bottom_left
+                  align: LV_ALIGN_BOTTOM_LEFT
                   text: "Close"
             on_click:
               - homeassistant.service:
@@ -293,11 +288,11 @@ lvgl:
             widgets:
               - label:
                   text_font: $icon_font
-                  align: top_left
+                  align: LV_ALIGN_TOP_LEFT
                   id: printer_power_icon
                   text: $printer
               - label:
-                  align: bottom_left
+                  align: LV_ALIGN_BOTTOM_LEFT
                   id: printer_power_label
                   text: "Printer"
             on_click:
@@ -315,11 +310,11 @@ lvgl:
             widgets:
               - label:
                   text_font: $icon_font
-                  align: top_left
+                  align: LV_ALIGN_TOP_LEFT
                   id: filament_heater_icon
                   text: $filament
               - label:
-                  align: bottom_left
+                  align: LV_ALIGN_BOTTOM_LEFT
                   id: filament_heater_label
                   text: "Dryer"
             on_click:
@@ -337,10 +332,10 @@ lvgl:
             widgets:
               - label:
                   text_font: $icon_font
-                  align: top_left
+                  align: LV_ALIGN_TOP_LEFT
                   text: $aircon
               - label:
-                  align: bottom_left
+                  align: LV_ALIGN_BOTTOM_LEFT
                   text: "Aircon"
             on_click:
               - homeassistant.service:
@@ -355,11 +350,11 @@ lvgl:
             widgets:
               - label:
                   text_font: $icon_font
-                  align: top_left
+                  align: LV_ALIGN_TOP_LEFT
                   id: battery_charger_icon
                   text: $battery
               - label:
-                  align: bottom_left
+                  align: LV_ALIGN_BOTTOM_LEFT
                   id: battery_charger_label
                   text: "Charger"
             on_click:
@@ -377,11 +372,11 @@ lvgl:
             widgets:
               - label:
                   text_font: $icon_font
-                  align: top_left
+                  align: LV_ALIGN_TOP_LEFT
                   id: storage_lights_icon
                   text: $package
               - label:
-                  align: bottom_left
+                  align: LV_ALIGN_BOTTOM_LEFT
                   id: storage_lights_label
                   text: "Storage"
             on_click:
@@ -399,11 +394,11 @@ lvgl:
             widgets:
               - label:
                   text_font: $icon_font
-                  align: top_left
+                  align: LV_ALIGN_TOP_LEFT
                   id: network_rack_icon
                   text: $network
               - label:
-                  align: bottom_left
+                  align: LV_ALIGN_BOTTOM_LEFT
                   id: network_rack_label
                   text: "Network Rack"
             on_click:
