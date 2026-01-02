@@ -1,10 +1,15 @@
 lvgl:
+  # Новий стиль з кириличним шрифтом для top_layer (температура і годинник)
+  style_definitions:
+    - id: roboto15_cyrillic_style
+      text_font: roboto15_cyrillic
+
   top_layer:
     widgets:
       - label:
           text: "-° / -°"
           id: temperatures
-          styles: roboto15_style
+          styles: roboto15_cyrillic_style   # новий стиль з кирилицею
           align: LV_ALIGN_TOP_LEFT
           x: 8
           y: 4
@@ -12,7 +17,7 @@ lvgl:
       - label:
           text: "--:--"
           id: display_time
-          styles: roboto15_style
+          styles: roboto15_cyrillic_style   # новий стиль з кирилицею
           align: LV_ALIGN_TOP_MID
           x: 0
           y: 4
