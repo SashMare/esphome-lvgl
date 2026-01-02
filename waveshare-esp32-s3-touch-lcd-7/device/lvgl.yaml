@@ -65,7 +65,7 @@ lvgl:
             id: battery_voltage_label
             align: LV_ALIGN_TOP_MID
             y: 110
-            text_font: roboto15_font
+            text_font: roboto15_cyrillic
             text_color: 0xFFFFFF
             text: !lambda |-
               char buf[20];
@@ -76,7 +76,7 @@ lvgl:
             id: battery_current_label
             align: LV_ALIGN_TOP_MID
             y: 140
-            text_font: roboto15_font
+            text_font: roboto15_cyrillic
             text_color: 0xFFFFFF
             text: !lambda |-
               char buf[20];
@@ -87,7 +87,7 @@ lvgl:
             id: battery_temp_label
             align: LV_ALIGN_TOP_MID
             y: 170
-            text_font: roboto15_font
+            text_font: roboto15_cyrillic
             text_color: 0xFFFFFF
             text: !lambda |-
               char buf[20];
@@ -98,7 +98,7 @@ lvgl:
             id: battery_status_label
             align: LV_ALIGN_TOP_MID
             y: 200
-            text_font: roboto15_font
+            text_font: roboto15_cyrillic
             text_color: !lambda 'return id(battery_soc) > 0 ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
             text: !lambda 'return id(battery_status).c_str();'
 
