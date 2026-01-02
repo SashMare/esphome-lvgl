@@ -1,45 +1,41 @@
 font:
-  # Оригінальний Roboto 17 без кирилиці (залишаємо для сумісності)
   - file: "gfonts://Roboto@700"
     id: roboto17_font
     size: 17
     bpp: 4
 
-  # Оригінальний Roboto 15 без кирилиці (залишаємо для сумісності)
   - file: "gfonts://Roboto"
     id: roboto15_font
     size: 15
     bpp: 4
 
-  # Новий Roboto 15 з повною підтримкою кирилиці (українська + російська)
   - file: "gfonts://Roboto"
     id: roboto15_cyrillic
     size: 15
     bpp: 4
-    glyphs: " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~°АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯабвгґдеєжзиіїйклмнопрстуфхцчшщьюя"
+    glyphs: |-
+      !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~°АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯабвгґдеєжзиіїйклмнопрстуфхцчшщьюя
 
-  # Новий Roboto 17 з повною підтримкою кирилиці
   - file: "gfonts://Roboto@700"
     id: roboto17_cyrillic
     size: 17
     bpp: 4
-    glyphs: " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~°АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯабвгґдеєжзиіїйклмнопрстуфхцчшщьюя"
+    glyphs: |-
+      !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~°АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯабвгґдеєжзиіїйклмнопрстуфхцчшщьюя
 
-  # Montserrat 48 для великого SOC (якщо потрібно кирилицю — додаємо)
   - file: "gfonts://Montserrat@700"
     id: montserrat_48
     size: 48
     bpp: 4
     glyphs: "0123456789.%"
 
-  # Montserrat 48 з кирилицею (якщо хочеш українські літери в SOC %)
   - file: "gfonts://Montserrat@700"
     id: montserrat_48_cyrillic
     size: 48
     bpp: 4
     glyphs: "0123456789.%АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯабвгґдеєжзиіїйклмнопрстуфхцчшщьюя"
 
-  # Іконковий шрифт (якщо в тебе є окремий — залиши як був)
+  # Іконковий шрифт (для повної версії завантаж файл нижче)
   - file: "fonts/MaterialIcons-Regular.ttf"
     id: icon_font
     size: 24
