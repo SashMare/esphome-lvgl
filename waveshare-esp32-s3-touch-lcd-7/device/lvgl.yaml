@@ -38,7 +38,6 @@ lvgl:
       widgets:
      
         # ==================== PYLONTECH BATTERY SECTION ====================
-        # Велика дуга SOC
         - arc:
             id: battery_arc
             align: top_mid
@@ -51,11 +50,10 @@ lvgl:
             bg_color: 0x222222
             bg_opa: cover
             line_width: 35
-            line_color: 0x444444   # фон дуги
+            line_color: 0x444444
             indicator:
-              arc_color: 0x00FF00   # індикатор зелений (0xFFFF00 жовтий, 0xFF0000 червоний)
+              arc_color: 0x00FF00   # зелений індикатор
 
-        # Великий відсоток SOC в центрі
         - label:
             id: battery_soc_label
             align: top_mid
@@ -64,7 +62,6 @@ lvgl:
             text_color: 0xFFFFFF
             text: !lambda 'return String(id(battery_soc), 1) + "%";'
 
-        # Параметри під дугою
         - label:
             id: battery_voltage_label
             align: top_mid
@@ -97,7 +94,7 @@ lvgl:
             text_color: !lambda 'return id(battery_soc) > 0 ? 0x00FF00 : 0xFF0000;'
             text: !lambda 'return id(battery_status).c_str();'
 
-        # Кнопка ручного оновлення
+        # Кнопка оновлення (тепер працює)
         - button:
             height: $button_height_single
             width: $button_width
@@ -112,9 +109,9 @@ lvgl:
                   align: bottom_left
                   text: "Оновити батарею"
             on_click:
-              - interval.trigger: pylontech_update
+              - component.update: pylontech_update   # правильний синтаксис
 
-        # ==================== ІСНУЮЧІ КНОПКИ ====================
+        # ==================== ВСІ ТВОЇ ОРИГІНАЛЬНІ КНОПКИ ====================
         - button:
             height: $button_height_single
             width: $button_width
