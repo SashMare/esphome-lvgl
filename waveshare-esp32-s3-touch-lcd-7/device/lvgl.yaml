@@ -87,41 +87,6 @@ lvgl:
               snprintf(buf, sizeof(buf), "Струм: %.2f А", id(battery_current));
               return buf;
 
-        - label:
-            id: battery_temp_label
-            align: LV_ALIGN_TOP_MID
-            y: 170
-            text_font: roboto15_cyrillic
-            text_color: 0xFFFFFF
-            text: !lambda |-
-              char buf[20];
-              snprintf(buf, sizeof(buf), "Темп: %.1f °C", id(battery_temp));
-              return buf;
-
-        - label:
-            id: battery_status_label
-            align: LV_ALIGN_TOP_MID
-            y: 200
-            text_font: roboto15_cyrillic
-            text_color: !lambda 'return id(battery_soc) > 0 ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
-            text: !lambda 'return id(battery_status).c_str();'
-
-        - button:
-            height: $button_height_single
-            width: $button_width
-            checkable: false
-            styles: control
-            widgets:
-              - label:
-                  text_font: $icon_font
-                  align: LV_ALIGN_TOP_LEFT
-                  text: $battery
-              - label:
-                  align: LV_ALIGN_BOTTOM_LEFT
-                  text: "Оновити батарею"
-            on_click:
-              - component.update: my_pylontech
-
         # ==================== ІСНУЮЧІ КНОПКИ ====================
         - button:
             height: $button_height_single
