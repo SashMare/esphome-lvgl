@@ -99,7 +99,7 @@ lvgl:
             width: 470px
             height: 200px
             bg_color: 0x111111
-            bg_opa: 204
+            bg_opa: 80%
             border_width: 2
             border_color: 0x00FF00
             radius: 15
