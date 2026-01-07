@@ -46,7 +46,7 @@ lvgl:
             rotation: 135
             min_value: 0
             max_value: 100
-            value: !lambda 'return id(battery_soc);'
+            value: !lambda 'return (int16_t) round(id(battery_soc).state);'
             bg_color: 0x222222
             bg_opa: LV_OPA_COVER
             line_width: 35
@@ -62,9 +62,9 @@ lvgl:
             text_color: 0xFFFFFF
             text: !lambda |-
               char buf[10];
-              snprintf(buf, sizeof(buf), "%.1f%%", id(battery_soc));
+              snprintf(buf, sizeof(buf), "%.1f%%", id(battery_soc).state);
               return buf;
-
+              
         - label:
             id: battery_voltage_label
             align: LV_ALIGN_TOP_MID
@@ -103,8 +103,8 @@ lvgl:
             align: LV_ALIGN_TOP_MID
             y: 200
             text_font: roboto15_cyrillic
-            text_color: !lambda 'return id(battery_soc) > 0 ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
-            text: !lambda 'return id(battery_status).c_str();'
+            text_color: !lambda 'return id(battery_soc).state > 0 ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
+            text: !lambda 'return id(battery_status).state.c_str();'
 
         - button:
             height: $button_height_single
