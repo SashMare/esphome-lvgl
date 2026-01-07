@@ -87,7 +87,7 @@ lvgl:
               snprintf(buf, sizeof(buf), "Струм: %.2f А", id(battery_current).state);
               return buf;
 
-# ==================== ТАБЛИЦЯ БАТАРЕЙ ====================
+        # ==================== ТАБЛИЦЯ БАТАРЕЙ ====================
         - obj:  # Контейнер для таблиці
             id: battery_table_container
             align: LV_ALIGN_BOTTOM_MID
