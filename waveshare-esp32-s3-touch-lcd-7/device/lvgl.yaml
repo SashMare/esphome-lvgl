@@ -82,14 +82,13 @@ lvgl:
               char buf[20];
               snprintf(buf, sizeof(buf), "Струм: %.2f А", id(battery_current).state);
               return buf;
-
         # ==================== ТАБЛИЦЯ БАТАРЕЙ ====================
         - obj:
             id: battery_table_container
             align: LV_ALIGN_BOTTOM_MID
             y: -10
             width: lv_pct(98)
-            height: 280
+            height: 200  # Менше висоти, бо без grid
             bg_color: 0x111111
             bg_opa: LV_OPA_80
             border_width: 2
@@ -97,140 +96,125 @@ lvgl:
             radius: 15
             pad_all: 8
             layout:
-              type: grid
-              grid_columns: [50, 70, 80, 70, 70, 90, 120]
-              grid_rows: [35, 40]
+              type: flex
+              flex_flow: LV_FLEX_FLOW_COLUMN
             widgets:
-              # Заголовок
-              - label:
-                  grid_cell:
-                    x_pos: 0
-                    y_pos: 0
-                  text_font: roboto15_cyrillic
-                  text_color: 0x00FF00
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "№"
-              - label:
-                  grid_cell:
-                    x_pos: 1
-                    y_pos: 0
-                  text_font: roboto15_cyrillic
-                  text_color: 0x00FF00
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "SOC"
-              - label:
-                  grid_cell:
-                    x_pos: 2
-                    y_pos: 0
-                  text_font: roboto15_cyrillic
-                  text_color: 0x00FF00
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "State"
-              - label:
-                  grid_cell:
-                    x_pos: 3
-                    y_pos: 0
-                  text_font: roboto15_cyrillic
-                  text_color: 0x00FF00
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "V"
-              - label:
-                  grid_cell:
-                    x_pos: 4
-                    y_pos: 0
-                  text_font: roboto15_cyrillic
-                  text_color: 0x00FF00
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "A"
-              - label:
-                  grid_cell:
-                    x_pos: 5
-                    y_pos: 0
-                  text_font: roboto15_cyrillic
-                  text_color: 0x00FF00
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "Cycles"
-              - label:
-                  grid_cell:
-                    x_pos: 6
-                    y_pos: 0
-                  text_font: roboto15_cyrillic
-                  text_color: 0x00FF00
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "Temp"
+              # Заголовок рядок
+              - obj:
+                  width: lv_pct(100)
+                  height: 35
+                  layout:
+                    type: flex
+                    flex_flow: LV_FLEX_FLOW_ROW
+                  widgets:
+                    - label:
+                        width: 50
+                        text_font: roboto15_cyrillic
+                        text_color: 0x00FF00
+                        text_align: LV_TEXT_ALIGN_CENTER
+                        text: "№"
+                    - label:
+                        width: 70
+                        text_font: roboto15_cyrillic
+                        text_color: 0x00FF00
+                        text_align: LV_TEXT_ALIGN_CENTER
+                        text: "SOC"
+                    - label:
+                        width: 80
+                        text_font: roboto15_cyrillic
+                        text_color: 0x00FF00
+                        text_align: LV_TEXT_ALIGN_CENTER
+                        text: "State"
+                    - label:
+                        width: 70
+                        text_font: roboto15_cyrillic
+                        text_color: 0x00FF00
+                        text_align: LV_TEXT_ALIGN_CENTER
+                        text: "V"
+                    - label:
+                        width: 70
+                        text_font: roboto15_cyrillic
+                        text_color: 0x00FF00
+                        text_align: LV_TEXT_ALIGN_CENTER
+                        text: "A"
+                    - label:
+                        width: 90
+                        text_font: roboto15_cyrillic
+                        text_color: 0x00FF00
+                        text_align: LV_TEXT_ALIGN_CENTER
+                        text: "Cycles"
+                    - label:
+                        width: 120
+                        text_font: roboto15_cyrillic
+                        text_color: 0x00FF00
+                        text_align: LV_TEXT_ALIGN_CENTER
+                        text: "Temp"
 
               # Рядок даних
-              - label:
-                  grid_cell:
-                    x_pos: 0
-                    y_pos: 1
-                  text_font: roboto15_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "Стек"
-              - label:
-                  grid_cell:
-                    x_pos: 1
-                    y_pos: 1
-                  text_font: roboto15_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: !lambda |-
-                    char buf[10];
-                    snprintf(buf, sizeof(buf), "%.0f%%", id(battery_soc).state);
-                    return buf;
-              - label:
-                  grid_cell:
-                    x_pos: 2
-                    y_pos: 1
-                  text_font: roboto15_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: !lambda 'return id(battery_status)->state.c_str();'
-              - label:
-                  grid_cell:
-                    x_pos: 3
-                    y_pos: 1
-                  text_font: roboto15_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: !lambda |-
-                    char buf[10];
-                    snprintf(buf, sizeof(buf), "%.2f", id(battery_voltage).state);
-                    return buf;
-              - label:
-                  grid_cell:
-                    x_pos: 4
-                    y_pos: 1
-                  text_font: roboto15_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: !lambda |-
-                    char buf[10];
-                    snprintf(buf, sizeof(buf), "%.2f", id(battery_current).state);
-                    return buf;
-              - label:
-                  grid_cell:
-                    x_pos: 5
-                    y_pos: 1
-                  text_font: roboto15_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: !lambda |-
-                    char buf[10];
-                    snprintf(buf, sizeof(buf), "%.0f", id(battery_cycles).state);
-                    return buf;
-              - label:
-                  grid_cell:
-                    x_pos: 6
-                    y_pos: 1
-                  text_font: roboto15_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: !lambda |-
-                    char buf[20];
-                    snprintf(buf, sizeof(buf), "%.1f °C", id(battery_temp).state);
-                    return buf;
+              - obj:
+                  width: lv_pct(100)
+                  height: 40
+                  layout:
+                    type: flex
+                    flex_flow: LV_FLEX_FLOW_ROW
+                  widgets:
+                    - label:
+                        width: 50
+                        text_font: roboto15_cyrillic
+                        text_color: 0xFFFFFF
+                        text_align: LV_TEXT_ALIGN_CENTER
+                        text: "Стек"
+                    - label:
+                        width: 70
+                        text_font: roboto15_cyrillic
+                        text_color: 0xFFFFFF
+                        text_align: LV_TEXT_ALIGN_CENTER
+                        text: !lambda |-
+                          char buf[10];
+                          snprintf(buf, sizeof(buf), "%.0f%%", id(battery_soc).state);
+                          return buf;
+                    - label:
+                        width: 80
+                        text_font: roboto15_cyrillic
+                        text_color: 0xFFFFFF
+                        text_align: LV_TEXT_ALIGN_CENTER
+                        text: !lambda 'return id(battery_status)->state.c_str();'
+                    - label:
+                        width: 70
+                        text_font: roboto15_cyrillic
+                        text_color: 0xFFFFFF
+                        text_align: LV_TEXT_ALIGN_CENTER
+                        text: !lambda |-
+                          char buf[10];
+                          snprintf(buf, sizeof(buf), "%.2f", id(battery_voltage).state);
+                          return buf;
+                    - label:
+                        width: 70
+                        text_font: roboto15_cyrillic
+                        text_color: 0xFFFFFF
+                        text_align: LV_TEXT_ALIGN_CENTER
+                        text: !lambda |-
+                          char buf[10];
+                          snprintf(buf, sizeof(buf), "%.2f", id(battery_current).state);
+                          return buf;
+                    - label:
+                        width: 90
+                        text_font: roboto15_cyrillic
+                        text_color: 0xFFFFFF
+                        text_align: LV_TEXT_ALIGN_CENTER
+                        text: !lambda |-
+                          char buf[10];
+                          snprintf(buf, sizeof(buf), "%.0f", id(battery_cycles).state);
+                          return buf;
+                    - label:
+                        width: 120
+                        text_font: roboto15_cyrillic
+                        text_color: 0xFFFFFF
+                        text_align: LV_TEXT_ALIGN_CENTER
+                        text: !lambda |-
+                          char buf[20];
+                          snprintf(buf, sizeof(buf), "%.1f °C", id(battery_temp).state);
+                          return buf;
         
 
         # ==================== ІСНУЮЧІ КНОПКИ ====================
