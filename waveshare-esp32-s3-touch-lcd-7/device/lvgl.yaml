@@ -503,7 +503,7 @@ lvgl:
               - homeassistant.service:
                   service: light.toggle
                   data:
-                    entity_id: light.office_storage
+                    entity_id: light.corridor_light
 
         - button:
             height: $button_height_single
