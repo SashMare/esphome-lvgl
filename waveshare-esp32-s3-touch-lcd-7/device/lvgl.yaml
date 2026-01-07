@@ -486,7 +486,7 @@ lvgl:
         - button:
             height: $button_height_single
             width: $button_width
-            checkable: true
+            checkable: false
             id: storage_lights_button
             styles: control
             widgets:
