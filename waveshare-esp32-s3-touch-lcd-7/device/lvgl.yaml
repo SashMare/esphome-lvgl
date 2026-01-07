@@ -29,7 +29,7 @@ lvgl:
         type: flex
         flex_flow: LV_FLEX_FLOW_COLUMN_WRAP
       width: lv_pct(100)
-      bg_color: black
+      bg_color: 0x222222
       bg_opa: LV_OPA_COVER
       pad_top: 30
       pad_bottom: 5
@@ -186,6 +186,9 @@ lvgl:
                     char buf[20];
                     snprintf(buf, sizeof(buf), "%.1f °C", id(battery_temp).state);
                     return buf;
+
+        # ==================== ІСНУЮЧІ КНОПКИ ====================
+        # (твої кнопки залишаються без змін — встав їх сюди точно як у твоєму файлі)
 
         # ==================== ІСНУЮЧІ КНОПКИ ====================
         - button:
