@@ -187,10 +187,10 @@ binary_sensor:
           state:
             checked: !lambda return x;
 
-  # Office Storage Lights
+  # Corridor Lights
   - platform: homeassistant
     id: office_storage_lights
-    entity_id: light.office_storage
+    entity_id: light.corridor_light
     trigger_on_initial_state: true
     on_state:
       then:
