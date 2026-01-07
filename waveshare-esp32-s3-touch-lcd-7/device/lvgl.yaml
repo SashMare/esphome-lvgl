@@ -62,7 +62,7 @@ lvgl:
             text_color: 0xFFFFFF
             text: !lambda |-
               char buf[10];
-              snprintf(buf, sizeof(buf), "%.1f%%", id(battery_soc));
+              snprintf(buf, sizeof(buf), "%.1f%%", id(battery_soc).state); 
               return buf;
 
         - label:
@@ -84,7 +84,7 @@ lvgl:
             text_color: 0xFFFFFF
             text: !lambda |-
               char buf[20];
-              snprintf(buf, sizeof(buf), "Струм: %.2f А", id(battery_current));
+              snprintf(buf, sizeof(buf), "Струм: %.2f А", id(battery_current).state);
               return buf;
 
 # ==================== ТАБЛИЦЯ БАТАРЕЙ ====================
