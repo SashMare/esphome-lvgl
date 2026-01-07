@@ -1,7 +1,7 @@
 lvgl:
   style_definitions:
     - id: roboto15_cyrillic_style
-      text_font: roboto17_font
+      text_font: roboto15_font
 
   top_layer:
     widgets:
