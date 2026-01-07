@@ -120,7 +120,7 @@ lvgl:
                   align: LV_ALIGN_BOTTOM_LEFT
                   text: "Оновити батарею"
             on_click:
-              - component.update: pylontech_update
+              - component.update: my_pylontech
 
         # ==================== ІСНУЮЧІ КНОПКИ ====================
         - button:
