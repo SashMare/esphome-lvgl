@@ -388,29 +388,27 @@ lvgl:
                   data:
                     entity_id: light.office_network_rack
 
-        # ==================== ТАБЛИЦЯ БАТАРЕЙ ====================
+# ==================== ТАБЛИЦЯ БАТАРЕЙ ====================
         - obj:  # Контейнер для таблиці
             id: battery_table_container
-            align: LV_ALIGN_TOP_MID
-            y: 200  # Під дугою, підкорегуй за потребою
-            width: lv_pct(95)
-            height: 300  # Висота таблиці
+            align: LV_ALIGN_BOTTOM_MID  # Перемістили вниз екрану, щоб не перекривати дугу
+            y: -10
+            width: lv_pct(98)
+            height: 280
             bg_color: 0x111111
-            bg_opa: LV_OPA_70
+            bg_opa: LV_OPA_80
             border_width: 2
             border_color: 0x00FF00
-            radius: 10
-            pad_all: 5
+            radius: 15
+            pad_all: 8
             layout:
               type: grid
-              grid_columns: [50, 60, 70, 60, 60, 80, 100]  # Ширина колонок під текст
-              grid_rows: [30, 30, 30, 30, 30, 30, 30, 30]  # 1 заголовок + 7 рядків (можна менше)
+              grid_columns: [50, 70, 80, 70, 70, 90, 120]
+              grid_rows: [35, 40]  # Заголовок + 1 рядок (для стеку)
             widgets:
               # Заголовок
               - label:
-                  grid_cell:
-                    column_pos: 0
-                    row_pos: 0
+                  grid_cell: { column_pos: 0, row_pos: 0 }
                   text_font: roboto15_cyrillic
                   text_color: 0x00FF00
                   text: "№"
@@ -420,68 +418,93 @@ lvgl:
                   text_font: roboto15_cyrillic
                   text_color: 0x00FF00
                   text: "SOC"
+                  text_align: LV_TEXT_ALIGN_CENTER
               - label:
                   grid_cell: { column_pos: 2, row_pos: 0 }
                   text_font: roboto15_cyrillic
                   text_color: 0x00FF00
                   text: "State"
+                  text_align: LV_TEXT_ALIGN_CENTER
               - label:
                   grid_cell: { column_pos: 3, row_pos: 0 }
                   text_font: roboto15_cyrillic
                   text_color: 0x00FF00
                   text: "V"
+                  text_align: LV_TEXT_ALIGN_CENTER
               - label:
                   grid_cell: { column_pos: 4, row_pos: 0 }
                   text_font: roboto15_cyrillic
                   text_color: 0x00FF00
                   text: "A"
+                  text_align: LV_TEXT_ALIGN_CENTER
               - label:
                   grid_cell: { column_pos: 5, row_pos: 0 }
                   text_font: roboto15_cyrillic
                   text_color: 0x00FF00
                   text: "Cycles"
+                  text_align: LV_TEXT_ALIGN_CENTER
               - label:
                   grid_cell: { column_pos: 6, row_pos: 0 }
                   text_font: roboto15_cyrillic
                   text_color: 0x00FF00
                   text: "Temp-Mos"
+                  text_align: LV_TEXT_ALIGN_CENTER
 
-              # Приклад рядка для стеку (загальні дані). Для per-battery — дублюй і змінюй ламбди
+              # Рядок даних для всього стеку
               - label:
                   grid_cell: { column_pos: 0, row_pos: 1 }
                   text_font: roboto15_cyrillic
                   text_color: 0xFFFFFF
                   text: "Стек"
+                  text_align: LV_TEXT_ALIGN_CENTER
               - label:
                   grid_cell: { column_pos: 1, row_pos: 1 }
+                  text_font: roboto15_cyrillic
+                  text_color: 0xFFFFFF
+                  text_align: LV_TEXT_ALIGN_CENTER
                   text: !lambda |-
                     char buf[10];
                     snprintf(buf, sizeof(buf), "%.0f%%", id(battery_soc).state);
                     return buf;
               - label:
                   grid_cell: { column_pos: 2, row_pos: 1 }
-                  text: !lambda 'return id(battery_state)->state.c_str();'
+                  text_font: roboto15_cyrillic
+                  text_color: 0xFFFFFF
+                  text_align: LV_TEXT_ALIGN_CENTER
+                  text: !lambda 'return id(battery_status)->state.c_str();'
               - label:
                   grid_cell: { column_pos: 3, row_pos: 1 }
+                  text_font: roboto15_cyrillic
+                  text_color: 0xFFFFFF
+                  text_align: LV_TEXT_ALIGN_CENTER
                   text: !lambda |-
                     char buf[10];
                     snprintf(buf, sizeof(buf), "%.2f", id(battery_voltage).state);
                     return buf;
               - label:
                   grid_cell: { column_pos: 4, row_pos: 1 }
+                  text_font: roboto15_cyrillic
+                  text_color: 0xFFFFFF
+                  text_align: LV_TEXT_ALIGN_CENTER
                   text: !lambda |-
                     char buf[10];
                     snprintf(buf, sizeof(buf), "%.2f", id(battery_current).state);
                     return buf;
               - label:
                   grid_cell: { column_pos: 5, row_pos: 1 }
+                  text_font: roboto15_cyrillic
+                  text_color: 0xFFFFFF
+                  text_align: LV_TEXT_ALIGN_CENTER
                   text: !lambda |-
                     char buf[10];
                     snprintf(buf, sizeof(buf), "%.0f", id(battery_cycles).state);
                     return buf;
               - label:
                   grid_cell: { column_pos: 6, row_pos: 1 }
+                  text_font: roboto15_cyrillic
+                  text_color: 0xFFFFFF
+                  text_align: LV_TEXT_ALIGN_CENTER
                   text: !lambda |-
                     char buf[20];
-                    snprintf(buf, sizeof(buf), "%.1f-%.1f", 14.0, 12.4);  # Заміни на реальні min-max, якщо є сенсори
-                    return buf;                    
+                    snprintf(buf, sizeof(buf), "%.1f °C", id(battery_temp).state);
+                    return buf;
