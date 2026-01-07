@@ -2,14 +2,14 @@ sensor:
 
   # Header Outdoor Temperate
   - platform: homeassistant
-    entity_id: sensor.office_temperature
+    entity_id: sensor.vyshneve_vulitsia_temperature
     id: office_temperature
     on_value:
       - lvgl.label.update:
           id: temperatures
           text:
             format: "%d° / %d°"
-            args: [ '(int)round(id(outdoor_temperature).state)', '(int)round(x)' ]
+            args: [ '(int)round(id(office_temperature).state)', '(int)round(x)' ]
 
   - platform: homeassistant
     entity_id: sensor.vyshneve_vulitsia_temperature
@@ -19,7 +19,7 @@ sensor:
           id: temperatures
           text:
             format: "%d° / %d°"
-            args: [ '(int)round(x)', '(int)round(id(office_temperature).state)' ]
+            args: [ '(int)round(x)', '(int)round(id(outdoor_temperature).state)' ]
 
   # Office Blind Position
   - platform: homeassistant
