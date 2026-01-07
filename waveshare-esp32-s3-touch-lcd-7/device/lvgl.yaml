@@ -22,7 +22,7 @@ lvgl:
           y: 4
           text_align: LV_TEXT_ALIGN_CENTER
           text_color: 0xFFFFFF
-          
+         
   pages:
     - id: main_page
       layout:
@@ -35,7 +35,6 @@ lvgl:
       pad_bottom: 5
       pad_left: 5
       pad_right: 5
-
       widgets:
         # ==================== PYLONTECH BATTERY SECTION ====================
         - arc:
@@ -53,7 +52,6 @@ lvgl:
             line_color: 0x444444
             indicator:
               arc_color: 0x00FF00
-
         - label:
             id: battery_soc_label
             align: LV_ALIGN_TOP_MID
@@ -62,9 +60,8 @@ lvgl:
             text_color: 0xFFFFFF
             text: !lambda |-
               char buf[10];
-              snprintf(buf, sizeof(buf), "%.1f%%", id(battery_soc).state); 
+              snprintf(buf, sizeof(buf), "%.1f%%", id(battery_soc).state);
               return buf;
-
         - label:
             id: battery_voltage_label
             align: LV_ALIGN_TOP_MID
@@ -75,7 +72,6 @@ lvgl:
               char buf[20];
               snprintf(buf, sizeof(buf), "Напруга: %.2f В", id(battery_voltage).state);
               return buf;
-
         - label:
             id: battery_current_label
             align: LV_ALIGN_TOP_MID
@@ -87,26 +83,24 @@ lvgl:
               snprintf(buf, sizeof(buf), "Струм: %.2f А", id(battery_current).state);
               return buf;
 
-# ==================== ТАБЛИЦЯ БАТАРЕЙ ====================
+        # ==================== ТАБЛИЦЯ БАТАРЕЙ ====================
         - obj:
             id: battery_table_container
             align: LV_ALIGN_BOTTOM_MID
             y: -10
             width: lv_pct(98)
             height: 280
-            bg_color: 0x111111        # ← виправлено: темно-сірий фон
+            bg_color: 0x111111
             bg_opa: LV_OPA_80
             border_width: 2
-            border_color: 0x00FF00    # ← виправлено: зелена рамка
+            border_color: 0x00FF00
             radius: 15
             pad_all: 8
             layout:
               type: grid
               grid_columns: [50, 70, 80, 70, 70, 90, 120]
               grid_rows: [35, 40]
-      
             widgets:
-              # Заголовок (по порядку в клітинках)
               - label:
                   text_font: roboto15_cyrillic
                   text_color: 0x00FF00
@@ -142,8 +136,6 @@ lvgl:
                   text_color: 0x00FF00
                   text_align: LV_TEXT_ALIGN_CENTER
                   text: "Temp"
-
-              # Рядок даних (по порядку)
               - label:
                   text_font: roboto15_cyrillic
                   text_color: 0xFFFFFF
@@ -194,7 +186,7 @@ lvgl:
                     char buf[20];
                     snprintf(buf, sizeof(buf), "%.1f °C", id(battery_temp).state);
                     return buf;
-                    
+
         # ==================== ІСНУЮЧІ КНОПКИ ====================
         - button:
             height: $button_height_single
