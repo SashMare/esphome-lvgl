@@ -94,16 +94,17 @@ lvgl:
             y: -10
             width: lv_pct(98)
             height: 280
-            bg_color: 0x111111    # hex обов'язково
+            bg_color: 0x111111        # ← виправлено: темно-сірий фон
             bg_opa: LV_OPA_80
             border_width: 2
-            border_color: 0x00FF00
+            border_color: 0x00FF00    # ← виправлено: зелена рамка
             radius: 15
             pad_all: 8
             layout:
               type: grid
-              grid_columns: [50, 70, 80, 70, 70, 90, 120]  # 7 колонок
-              grid_rows: [35, 40]  # 2 рядки: заголовок + дані
+              grid_columns: [50, 70, 80, 70, 70, 90, 120]
+              grid_rows: [35, 40]
+      
             widgets:
               # Заголовок (по порядку в клітинках)
               - label:
