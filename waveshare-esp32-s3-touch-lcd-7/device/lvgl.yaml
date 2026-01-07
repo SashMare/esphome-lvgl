@@ -2,6 +2,7 @@ lvgl:
   style_definitions:
     - id: roboto15_cyrillic_style
       text_font: roboto15_cyrillic
+
   top_layer:
     widgets:
       - label:
@@ -21,7 +22,7 @@ lvgl:
           y: 4
           text_align: LV_TEXT_ALIGN_CENTER
           text_color: 0xFFFFFF
-        
+          
   pages:
     - id: main_page
       layout:
@@ -34,6 +35,7 @@ lvgl:
       pad_bottom: 5
       pad_left: 5
       pad_right: 5
+
       widgets:
         # ==================== PYLONTECH BATTERY SECTION ====================
         - arc:
@@ -44,13 +46,14 @@ lvgl:
             rotation: 135
             min_value: 0
             max_value: 100
-            value: !lambda 'return round(id(battery_soc).state);'
+            value: !lambda 'return id(battery_soc);'
             bg_color: 0x222222
             bg_opa: LV_OPA_COVER
             line_width: 35
             line_color: 0x444444
             indicator:
               arc_color: 0x00FF00
+
         - label:
             id: battery_soc_label
             align: LV_ALIGN_TOP_MID
@@ -59,8 +62,9 @@ lvgl:
             text_color: 0xFFFFFF
             text: !lambda |-
               char buf[10];
-              snprintf(buf, sizeof(buf), "%.1f%%", id(battery_soc).state);
+              snprintf(buf, sizeof(buf), "%.1f%%", id(battery_soc));
               return buf;
+
         - label:
             id: battery_voltage_label
             align: LV_ALIGN_TOP_MID
@@ -69,8 +73,9 @@ lvgl:
             text_color: 0xFFFFFF
             text: !lambda |-
               char buf[20];
-              snprintf(buf, sizeof(buf), "Напруга: %.2f В", id(battery_voltage).state);
+              snprintf(buf, sizeof(buf), "Напруга: %.2f В", id(battery_voltage));
               return buf;
+
         - label:
             id: battery_current_label
             align: LV_ALIGN_TOP_MID
@@ -79,8 +84,44 @@ lvgl:
             text_color: 0xFFFFFF
             text: !lambda |-
               char buf[20];
-              snprintf(buf, sizeof(buf), "Струм: %.2f А", id(battery_current).state);
+              snprintf(buf, sizeof(buf), "Струм: %.2f А", id(battery_current));
               return buf;
+
+        - label:
+            id: battery_temp_label
+            align: LV_ALIGN_TOP_MID
+            y: 170
+            text_font: roboto15_cyrillic
+            text_color: 0xFFFFFF
+            text: !lambda |-
+              char buf[20];
+              snprintf(buf, sizeof(buf), "Темп: %.1f °C", id(battery_temp));
+              return buf;
+
+        - label:
+            id: battery_status_label
+            align: LV_ALIGN_TOP_MID
+            y: 200
+            text_font: roboto15_cyrillic
+            text_color: !lambda 'return id(battery_soc) > 0 ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
+            text: !lambda 'return id(battery_status).c_str();'
+
+        - button:
+            height: $button_height_single
+            width: $button_width
+            checkable: false
+            styles: control
+            widgets:
+              - label:
+                  text_font: $icon_font
+                  align: LV_ALIGN_TOP_LEFT
+                  text: $battery
+              - label:
+                  align: LV_ALIGN_BOTTOM_LEFT
+                  text: "Оновити батарею"
+            on_click:
+              - component.update: my_pylontech
+
         # ==================== ТАБЛИЦЯ БАТАРЕЙ ====================
         - obj:
             id: battery_table_container
@@ -184,6 +225,7 @@ lvgl:
                     char buf[20];
                     snprintf(buf, sizeof(buf), "%.1f °C", id(battery_temp).state);
                     return buf;
+                    
         # ==================== ІСНУЮЧІ КНОПКИ ====================
         - button:
             height: $button_height_single
@@ -205,7 +247,8 @@ lvgl:
               - homeassistant.service:
                   service: scene.turn_on
                   data:
-                    entity_id: [scene.office](http://scene.office)_features
+                    entity_id: scene.office_features
+
         - button:
             height: $button_height_single
             width: $button_width
@@ -226,7 +269,8 @@ lvgl:
               - homeassistant.service:
                   service: scene.turn_on
                   data:
-                    entity_id: [scene.office](http://scene.office)_desk_call
+                    entity_id: scene.office_desk_call
+
         - button:
             height: $button_height_single
             width: $button_width
@@ -247,7 +291,8 @@ lvgl:
               - homeassistant.service:
                   service: scene.turn_on
                   data:
-                    entity_id: [scene.office](http://scene.office)_evening
+                    entity_id: scene.office_evening
+
         - button:
             height: $button_height_single
             width: $button_width
@@ -268,7 +313,8 @@ lvgl:
               - homeassistant.service:
                   service: scene.turn_on
                   data:
-                    entity_id: [scene.office](http://scene.office)_dimmed
+                    entity_id: scene.office_dimmed
+
         - button:
             height: $button_height_single
             width: $button_width
@@ -287,8 +333,9 @@ lvgl:
               - homeassistant.service:
                   service: cover.set_cover_position
                   data:
-                    entity_id: [cover.office](http://cover.office)_blind
+                    entity_id: cover.office_blind
                     position: "100"
+
         - button:
             height: $button_height_single
             width: $button_width
@@ -307,8 +354,9 @@ lvgl:
               - homeassistant.service:
                   service: cover.set_cover_position
                   data:
-                    entity_id: [cover.office](http://cover.office)_blind
+                    entity_id: cover.office_blind
                     position: "66"
+
         - button:
             height: $button_height_single
             width: $button_width
@@ -327,8 +375,9 @@ lvgl:
               - homeassistant.service:
                   service: cover.set_cover_position
                   data:
-                    entity_id: [cover.office](http://cover.office)_blind
+                    entity_id: cover.office_blind
                     position: "33"
+
         - button:
             height: $button_height_single
             width: $button_width
@@ -347,8 +396,9 @@ lvgl:
               - homeassistant.service:
                   service: cover.set_cover_position
                   data:
-                    entity_id: [cover.office](http://cover.office)_blind
+                    entity_id: cover.office_blind
                     position: "0"
+
         - button:
             height: $button_height_single
             width: $button_width
@@ -369,7 +419,8 @@ lvgl:
               - homeassistant.service:
                   service: switch.toggle
                   data:
-                    entity_id: [switch.office](http://switch.office)_3d_printer_power
+                    entity_id: switch.office_3d_printer_power
+
         - button:
             height: $button_height_single
             width: $button_width
@@ -390,7 +441,8 @@ lvgl:
               - homeassistant.service:
                   service: switch.toggle
                   data:
-                    entity_id: [switch.office](http://switch.office)_filament_heater_893b
+                    entity_id: switch.office_filament_heater_893b
+
         - button:
             height: $button_height_single
             width: $button_width
@@ -407,7 +459,8 @@ lvgl:
                   text: "Aircon"
             on_click:
               - homeassistant.service:
-                  service: [script.office](http://script.office)_air_conditioner
+                  service: script.office_air_conditioner
+
         - button:
             height: $button_height_single
             width: $button_width
@@ -429,6 +482,7 @@ lvgl:
                   service: switch.toggle
                   data:
                     entity_id: switch.d4c5
+
         - button:
             height: $button_height_single
             width: $button_width
@@ -449,7 +503,8 @@ lvgl:
               - homeassistant.service:
                   service: light.toggle
                   data:
-                    entity_id: light.corridor_light
+                    entity_id: light.office_storage
+
         - button:
             height: $button_height_single
             width: $button_width
@@ -470,4 +525,4 @@ lvgl:
               - homeassistant.service:
                   service: light.toggle
                   data:
-                    entity_id: [light.office](http://light.office)_network_rack
+                    entity_id: light.office_network_rack
