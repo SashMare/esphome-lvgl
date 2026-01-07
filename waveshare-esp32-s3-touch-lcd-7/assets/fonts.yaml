@@ -11,7 +11,7 @@ font:
 
   - file: "fonts/Roboto-Regular.ttf"
     id: roboto15_cyrillic
-    size: 15
+    size: 10
     bpp: 4
     glyphs: |-
       !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~°АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯабвгґдеєжзиіїйклмнопрстуфхцчшщьюя
