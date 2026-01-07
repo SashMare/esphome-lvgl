@@ -132,7 +132,7 @@ lvgl:
             bg_color: 0x111111
             bg_opa: LV_OPA_COVER
             border_width: 1
-            border_color: #1F5B9D
+            border_color: 0x1F5B9D
             radius: 15
             pad_all: 8
             layout:
