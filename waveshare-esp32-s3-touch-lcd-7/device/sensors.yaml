@@ -38,12 +38,11 @@ binary_sensor:
 
   # Battery Rack
   - platform: homeassistant
-    id: battery_rack_light
+    id: corridor_light_state
     entity_id: light.corridor_light
-    trigger_on_initial_state: true
     on_state:
       then:
         lvgl.widget.update:
-          id: battery_rack_light_button
+          id: battery_rack_light
           state:
             checked: !lambda return x;
