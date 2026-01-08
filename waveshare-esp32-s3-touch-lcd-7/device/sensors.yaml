@@ -35,26 +35,15 @@ binary_sensor:
           state:
             checked: !lambda return x;
 
-  # Corridor Lights
-  - platform: homeassistant
-    id: office_storage_lights
-    entity_id: light.corridor_light
-    trigger_on_initial_state: true
-    on_state:
-      then:
-        lvgl.widget.update:
-          id: storage_lights_button
-          state:
-            checked: !lambda return x;
 
-  # Network Rack
+  # Battery Rack
   - platform: homeassistant
-    id: network_rack
+    id: battery_rack_light
     entity_id: light.corridor_light
     trigger_on_initial_state: true
     on_state:
       then:
         lvgl.widget.update:
-          id: network_rack_button
+          id: battery_rack_light_button
           state:
             checked: !lambda return x;
