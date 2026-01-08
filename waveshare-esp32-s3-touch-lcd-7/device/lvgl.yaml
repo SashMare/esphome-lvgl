@@ -41,8 +41,8 @@ lvgl:
         - arc:
             id: battery_arc
             align: LV_ALIGN_TOP_MID
-            width: 300
-            height: 300
+            width: 200
+            height: 200
             rotation: 135
             min_value: 0
             max_value: 100
