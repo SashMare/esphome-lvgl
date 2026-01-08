@@ -123,110 +123,223 @@ lvgl:
             on_click:
               - component.update: my_pylontech
 
-        # ==================== ТАБЛИЦЯ БАТАРЕЙ ====================
-        - obj:
-            id: battery_table_container
-            align: LV_ALIGN_BOTTOM_MID
-            y: -10
-            width: 300
-            height: 280
-            bg_color: 0x111111
-            bg_opa: LV_OPA_COVER
-            border_width: 1
-            border_side: LV_BORDER_SIDE_RIGHT
-            border_color: 0x003366
-            radius: 15
-            pad_all: 8
-            layout:
-              type: grid
-              grid_columns: [20, 30, 50, 20, 30, 30, 120]
-              grid_rows: [35, 40]
-            widgets:
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "#"
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "SOC"
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "State"
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "V"
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "A"
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "Cycles"
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "Temp"
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "Стек"
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: !lambda |-
-                    char buf[10];
-                    snprintf(buf, sizeof(buf), "%.0f%%", id(battery_soc).state);
-                    return buf;
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: !lambda 'return id(battery_status)->state.c_str();'
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: !lambda |-
-                    char buf[10];
-                    snprintf(buf, sizeof(buf), "%.2f", id(battery_voltage).state);
-                    return buf;
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: !lambda |-
-                    char buf[10];
-                    snprintf(buf, sizeof(buf), "%.2f", id(battery_current).state);
-                    return buf;
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: !lambda |-
-                    char buf[10];
-                    snprintf(buf, sizeof(buf), "%.0f", id(battery_cycles).state);
-                    return buf;
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: !lambda |-
-                    char buf[20];
-                    snprintf(buf, sizeof(buf), "%.1f °C", id(battery_temp).state);
-                    return buf;
+# ==================== ТАБЛИЦЯ БАТАРЕЙ СТИЛЬ VICTRON ====================
+- obj:
+    id: battery_table_container
+    align: LV_ALIGN_BOTTOM_MID
+    y: -10
+    width: 300
+    height: 280
+    bg_color: 0x111111        # темний фон
+    bg_opa: LV_OPA_COVER
+    border_width: 2
+    border_color: 0x003366    # Victron синій
+    radius: 15
+    pad_all: 0
+    layout:
+      type: grid
+      grid_columns: [20, 30, 50, 20, 30, 30, 120]
+      grid_rows: [35, 35, 35, 35, 35, 35]  # додаткові рядки для батарей
+    widgets:
+
+      # ================= HEADER =================
+      - obj:
+          grid_cell_row_pos: 0
+          grid_cell_column_pos: 0
+          grid_cell_column_span: 7
+          height: 35
+          bg_color: 0x003366   # синій фон заголовка
+          widgets:
+            - label:
+                text_font: roboto12_cyrillic
+                text_color: 0xFFFFFF
+                text_align: LV_TEXT_ALIGN_CENTER
+                text: "Battery Table"
+
+      # ================= COLUMNS =================
+      - label:
+          grid_cell_row_pos: 1
+          grid_cell_column_pos: 0
+          text_font: roboto12_cyrillic
+          text_color: 0xE0E0E0
+          text_align: LV_TEXT_ALIGN_CENTER
+          text: "#"
+      - label:
+          grid_cell_row_pos: 1
+          grid_cell_column_pos: 1
+          text_font: roboto12_cyrillic
+          text_color: 0xE0E0E0
+          text_align: LV_TEXT_ALIGN_CENTER
+          text: "SOC"
+      - label:
+          grid_cell_row_pos: 1
+          grid_cell_column_pos: 2
+          text_font: roboto12_cyrillic
+          text_color: 0xE0E0E0
+          text_align: LV_TEXT_ALIGN_CENTER
+          text: "State"
+      - label:
+          grid_cell_row_pos: 1
+          grid_cell_column_pos: 3
+          text_font: roboto12_cyrillic
+          text_color: 0xE0E0E0
+          text_align: LV_TEXT_ALIGN_CENTER
+          text: "V"
+      - label:
+          grid_cell_row_pos: 1
+          grid_cell_column_pos: 4
+          text_font: roboto12_cyrillic
+          text_color: 0xE0E0E0
+          text_align: LV_TEXT_ALIGN_CENTER
+          text: "A"
+      - label:
+          grid_cell_row_pos: 1
+          grid_cell_column_pos: 5
+          text_font: roboto12_cyrillic
+          text_color: 0xE0E0E0
+          text_align: LV_TEXT_ALIGN_CENTER
+          text: "Cycles"
+      - label:
+          grid_cell_row_pos: 1
+          grid_cell_column_pos: 6
+          text_font: roboto12_cyrillic
+          text_color: 0xE0E0E0
+          text_align: LV_TEXT_ALIGN_CENTER
+          text: "Temp"
+
+      # ================= BATTERY ROWS =================
+      # Приклад для однієї батареї, можна копіювати на інші
+      - obj:
+          grid_cell_row_pos: 2
+          grid_cell_column_pos: 0
+          grid_cell_column_span: 7
+          height: 35
+          bg_color: 0x111111   # темний
+          widgets:
+            - label:
+                grid_cell_column_pos: 0
+                text_font: roboto12_cyrillic
+                text_color: 0xFFFFFF
+                text_align: LV_TEXT_ALIGN_CENTER
+                text: "1"
+            - label:
+                grid_cell_column_pos: 1
+                text_font: roboto12_cyrillic
+                text_color: 0x00FF00   # SOC зелений
+                text_align: LV_TEXT_ALIGN_CENTER
+                text: !lambda |-
+                  char buf[10];
+                  snprintf(buf, sizeof(buf), "%.0f%%", id(battery_soc).state);
+                  return buf;
+            - label:
+                grid_cell_column_pos: 2
+                text_font: roboto12_cyrillic
+                text_color: 0xFFFFFF
+                text_align: LV_TEXT_ALIGN_CENTER
+                text: !lambda 'return id(battery_status)->state.c_str();'
+            - label:
+                grid_cell_column_pos: 3
+                text_font: roboto12_cyrillic
+                text_color: 0xFFFFFF
+                text_align: LV_TEXT_ALIGN_CENTER
+                text: !lambda |-
+                  char buf[10];
+                  snprintf(buf, sizeof(buf), "%.2f", id(battery_voltage).state);
+                  return buf;
+            - label:
+                grid_cell_column_pos: 4
+                text_font: roboto12_cyrillic
+                text_color: 0xFFFFFF
+                text_align: LV_TEXT_ALIGN_CENTER
+                text: !lambda |-
+                  char buf[10];
+                  snprintf(buf, sizeof(buf), "%.2f", id(battery_current).state);
+                  return buf;
+            - label:
+                grid_cell_column_pos: 5
+                text_font: roboto12_cyrillic
+                text_color: 0xFFFFFF
+                text_align: LV_TEXT_ALIGN_CENTER
+                text: !lambda |-
+                  char buf[10];
+                  snprintf(buf, sizeof(buf), "%.0f", id(battery_cycles).state);
+                  return buf;
+            - label:
+                grid_cell_column_pos: 6
+                text_font: roboto12_cyrillic
+                text_color: 0xFFFFFF
+                text_align: LV_TEXT_ALIGN_CENTER
+                text: !lambda |-
+                  char buf[20];
+                  snprintf(buf, sizeof(buf), "%.1f °C", id(battery_temp).state);
+                  return buf;
+
+      # ================= SECOND ROW =================
+      - obj:
+          grid_cell_row_pos: 3
+          grid_cell_column_pos: 0
+          grid_cell_column_span: 7
+          height: 35
+          bg_color: 0x0F1F2F   # світліший (чергування)
+          widgets:
+            - label:
+                grid_cell_column_pos: 0
+                text_font: roboto12_cyrillic
+                text_color: 0xFFFFFF
+                text_align: LV_TEXT_ALIGN_CENTER
+                text: "2"
+            - label:
+                grid_cell_column_pos: 1
+                text_font: roboto12_cyrillic
+                text_color: 0x00FF00
+                text_align: LV_TEXT_ALIGN_CENTER
+                text: !lambda |-
+                  char buf[10];
+                  snprintf(buf, sizeof(buf), "%.0f%%", id(battery_soc_2).state);
+                  return buf;
+            - label:
+                grid_cell_column_pos: 2
+                text_font: roboto12_cyrillic
+                text_color: 0xFFFFFF
+                text_align: LV_TEXT_ALIGN_CENTER
+                text: !lambda 'return id(battery_status_2)->state.c_str();'
+            - label:
+                grid_cell_column_pos: 3
+                text_font: roboto12_cyrillic
+                text_color: 0xFFFFFF
+                text_align: LV_TEXT_ALIGN_CENTER
+                text: !lambda |-
+                  char buf[10];
+                  snprintf(buf, sizeof(buf), "%.2f", id(battery_voltage_2).state);
+                  return buf;
+            - label:
+                grid_cell_column_pos: 4
+                text_font: roboto12_cyrillic
+                text_color: 0xFFFFFF
+                text_align: LV_TEXT_ALIGN_CENTER
+                text: !lambda |-
+                  char buf[10];
+                  snprintf(buf, sizeof(buf), "%.2f", id(battery_current_2).state);
+                  return buf;
+            - label:
+                grid_cell_column_pos: 5
+                text_font: roboto12_cyrillic
+                text_color: 0xFFFFFF
+                text_align: LV_TEXT_ALIGN_CENTER
+                text: !lambda |-
+                  char buf[10];
+                  snprintf(buf, sizeof(buf), "%.0f", id(battery_cycles_2).state);
+                  return buf;
+            - label:
+                grid_cell_column_pos: 6
+                text_font: roboto12_cyrillic
+                text_color: 0xFFFFFF
+                text_align: LV_TEXT_ALIGN_CENTER
+                text: !lambda |-
+                  char buf[20];
+                  snprintf(buf, sizeof(buf), "%.1f °C", id(battery_temp_2).state);
+                  return buf;
+
                     
         # ==================== ІСНУЮЧІ КНОПКИ ====================
         - button:
