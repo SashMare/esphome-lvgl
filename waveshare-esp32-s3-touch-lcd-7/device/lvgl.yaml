@@ -424,4 +424,4 @@ lvgl:
               - homeassistant.service:
                   service: light.toggle
                   data:
-                    entity_id: light.office_network_rack
+                    entity_id: light.corridor_light
