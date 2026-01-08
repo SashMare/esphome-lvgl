@@ -9,9 +9,16 @@ font:
     size: 15
     bpp: 4
 
+ - file: "fonts/Roboto-Regular.ttf"
+    id: roboto10_cyrillic
+    size: 10
+    bpp: 4
+    glyphs: |-
+      !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~°АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯабвгґдеєжзиіїйклмнопрстуфхцчшщьюя
+
   - file: "fonts/Roboto-Regular.ttf"
     id: roboto15_cyrillic
-    size: 12
+    size: 15
     bpp: 4
     glyphs: |-
       !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~°АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯабвгґдеєжзиіїйклмнопрстуфхцчшщьюя
