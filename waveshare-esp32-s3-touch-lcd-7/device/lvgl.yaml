@@ -119,6 +119,7 @@ lvgl:
               - label:
                   align: LV_ALIGN_BOTTOM_LEFT
                   text: "Оновити батарею"
+                  text_font: roboto15_cyrillic
             on_click:
               - component.update: my_pylontech
 
@@ -141,47 +142,47 @@ lvgl:
               grid_rows: [35, 40]
             widgets:
               - label:
-                  text_font: roboto10_cyrillic
+                  text_font: roboto12_cyrillic
                   text_color: 0xFFFFFF
                   text_align: LV_TEXT_ALIGN_CENTER
                   text: "#"
               - label:
-                  text_font: roboto10_cyrillic
+                  text_font: roboto12_cyrillic
                   text_color: 0xFFFFFF
                   text_align: LV_TEXT_ALIGN_CENTER
                   text: "SOC"
               - label:
-                  text_font: roboto10_cyrillic
+                  text_font: roboto12_cyrillic
                   text_color: 0xFFFFFF
                   text_align: LV_TEXT_ALIGN_CENTER
                   text: "State"
               - label:
-                  text_font: roboto10_cyrillic
+                  text_font: roboto12_cyrillic
                   text_color: 0xFFFFFF
                   text_align: LV_TEXT_ALIGN_CENTER
                   text: "V"
               - label:
-                  text_font: roboto10_cyrillic
+                  text_font: roboto12_cyrillic
                   text_color: 0xFFFFFF
                   text_align: LV_TEXT_ALIGN_CENTER
                   text: "A"
               - label:
-                  text_font: roboto10_cyrillic
+                  text_font: roboto12_cyrillic
                   text_color: 0xFFFFFF
                   text_align: LV_TEXT_ALIGN_CENTER
                   text: "Cycles"
               - label:
-                  text_font: roboto10_cyrillic
+                  text_font: roboto12_cyrillic
                   text_color: 0xFFFFFF
                   text_align: LV_TEXT_ALIGN_CENTER
                   text: "Temp"
               - label:
-                  text_font: roboto10_cyrillic
+                  text_font: roboto12_cyrillic
                   text_color: 0xFFFFFF
                   text_align: LV_TEXT_ALIGN_CENTER
                   text: "Стек"
               - label:
-                  text_font: roboto10_cyrillic
+                  text_font: roboto12_cyrillic
                   text_color: 0xFFFFFF
                   text_align: LV_TEXT_ALIGN_CENTER
                   text: !lambda |-
@@ -189,12 +190,12 @@ lvgl:
                     snprintf(buf, sizeof(buf), "%.0f%%", id(battery_soc).state);
                     return buf;
               - label:
-                  text_font: roboto10_cyrillic
+                  text_font: roboto12_cyrillic
                   text_color: 0xFFFFFF
                   text_align: LV_TEXT_ALIGN_CENTER
                   text: !lambda 'return id(battery_status)->state.c_str();'
               - label:
-                  text_font: roboto10_cyrillic
+                  text_font: roboto12_cyrillic
                   text_color: 0xFFFFFF
                   text_align: LV_TEXT_ALIGN_CENTER
                   text: !lambda |-
@@ -202,7 +203,7 @@ lvgl:
                     snprintf(buf, sizeof(buf), "%.2f", id(battery_voltage).state);
                     return buf;
               - label:
-                  text_font: roboto10_cyrillic
+                  text_font: roboto12_cyrillic
                   text_color: 0xFFFFFF
                   text_align: LV_TEXT_ALIGN_CENTER
                   text: !lambda |-
@@ -210,7 +211,7 @@ lvgl:
                     snprintf(buf, sizeof(buf), "%.2f", id(battery_current).state);
                     return buf;
               - label:
-                  text_font: roboto10_cyrillic
+                  text_font: roboto12_cyrillic
                   text_color: 0xFFFFFF
                   text_align: LV_TEXT_ALIGN_CENTER
                   text: !lambda |-
@@ -218,7 +219,7 @@ lvgl:
                     snprintf(buf, sizeof(buf), "%.0f", id(battery_cycles).state);
                     return buf;
               - label:
-                  text_font: roboto10_cyrillic
+                  text_font: roboto12_cyrillic
                   text_color: 0xFFFFFF
                   text_align: LV_TEXT_ALIGN_CENTER
                   text: !lambda |-
