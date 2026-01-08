@@ -251,7 +251,7 @@ lvgl:
             height: $button_height_single
             width: $button_width
             checkable: true
-            id: battery_rack_light_button
+            id: battery_rack_light
             styles: control
             widgets:
               - label:
