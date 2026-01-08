@@ -9,7 +9,7 @@ font:
     size: 15
     bpp: 4
 
- - file: "fonts/Roboto-Regular.ttf"
+  - file: "fonts/Roboto-Regular.ttf"
     id: roboto10_cyrillic
     size: 10
     bpp: 4
