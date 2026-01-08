@@ -265,8 +265,9 @@ lvgl:
                   align: LV_ALIGN_BOTTOM_LEFT
                   id: battery_rack_label
                   text: "Battery Rack Light"
-            on_click:
-              - homeassistant.service:
-                  service: light.toggle
-                  data:
-                    entity_id: light.corridor_light
+            on_value:
+              then:
+                - homeassistant.service:
+                    service: light.toggle
+                    data:
+                      entity_id: light.corridor_light
