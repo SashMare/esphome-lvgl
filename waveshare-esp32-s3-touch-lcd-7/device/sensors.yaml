@@ -24,30 +24,6 @@ sensor:
 
 binary_sensor:
 
-  # Office Evening Scene
-  - platform: homeassistant
-    id: office_scene_evening
-    entity_id: binary_sensor.office_scene_evening
-    trigger_on_initial_state: true
-    on_state:
-      then:
-        lvgl.widget.update:
-          id: office_scene_evening_button
-          state:
-            checked: !lambda return x;
-
-  # Office Dimmed Scene
-  - platform: homeassistant
-    id: office_scene_dimmed
-    entity_id: binary_sensor.office_scene_dimmed
-    trigger_on_initial_state: true
-    on_state:
-      then:
-        lvgl.widget.update:
-          id: office_scene_dimmed_button
-          state:
-            checked: !lambda return x;
-
   # Office Calls Scene
   - platform: homeassistant
     id: office_scene_desk_call
@@ -60,19 +36,6 @@ binary_sensor:
           state:
             checked: !lambda return x;
 
-  # Office Features Scene
-  - platform: homeassistant
-    id: office_scene_features
-    entity_id: binary_sensor.office_scene_features
-    trigger_on_initial_state: true
-    on_state:
-      then:
-        lvgl.widget.update:
-          id: office_scene_features_button
-          state:
-            checked: !lambda return x;
-
-
 
   # Office Aircon
   - platform: homeassistant
@@ -83,19 +46,6 @@ binary_sensor:
       then:
         lvgl.widget.update:
           id: office_aircon_button
-          state:
-            checked: !lambda return x;
-
-
-  # Filament Heater 
-  - platform: homeassistant
-    id: office_filament_heater
-    entity_id: switch.office_filament_heater_893b
-    trigger_on_initial_state: true
-    on_state:
-      then:
-        lvgl.widget.update:
-          id: filament_heater_button
           state:
             checked: !lambda return x;
 
