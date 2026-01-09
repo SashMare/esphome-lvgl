@@ -25,6 +25,7 @@ sensor:
   - platform: homeassistant
     id: corridor_light_state
     entity_id: light.corridor_light
+    publish_initial_state: true
     on_state:
       then:
         lvgl.widget.update:
