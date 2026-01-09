@@ -22,7 +22,7 @@ lvgl:
           y: 4
           text_align: LV_TEXT_ALIGN_CENTER
           text_color: 0xFFFFFF
-          
+
   pages:
     - id: main_page
       layout:
@@ -37,7 +37,7 @@ lvgl:
       pad_right: 5
 
       widgets:
-        # ==================== PYLONTECH BATTERY SECTION ====================
+        # ==================== ARC + загальні дані (можна залишити або видалити) ====================
         - arc:
             id: battery_arc
             align: LV_ALIGN_TOP_MID
@@ -46,7 +46,7 @@ lvgl:
             rotation: 135
             min_value: 0
             max_value: 100
-            value: !lambda 'return (int16_t) round(id(battery_soc).state);'
+            value: !lambda 'return (int16_t) round(id(bat_soc)[0]);'   # SOC першої батареї (або середній)
             bg_color: 0x222222
             bg_opa: LV_OPA_COVER
             line_width: 35
@@ -62,50 +62,97 @@ lvgl:
             text_color: 0xFFFFFF
             text: !lambda |-
               char buf[10];
-              snprintf(buf, sizeof(buf), "%.1f%%", id(battery_soc).state);
-              return buf;
-              
-        - label:
-            id: battery_voltage_label
-            align: LV_ALIGN_TOP_MID
-            y: 110
-            text_font: roboto15_cyrillic
-            text_color: 0xFFFFFF
-            text: !lambda |-
-              char buf[20];
-              snprintf(buf, sizeof(buf), "Напруга: %.2f В", id(battery_voltage));
+              snprintf(buf, sizeof(buf), "%.0f%%", id(bat_soc)[0]);  # Перша або середній
               return buf;
 
-        - label:
-            id: battery_current_label
-            align: LV_ALIGN_TOP_MID
-            y: 140
-            text_font: roboto15_cyrillic
-            text_color: 0xFFFFFF
-            text: !lambda |-
-              char buf[20];
-              snprintf(buf, sizeof(buf), "Струм: %.2f А", id(battery_current));
-              return buf;
+        # ==================== ДИНАМІЧНА ТАБЛИЦЯ ДЛЯ 1-16 БАТАРЕЙ ====================
+        - table:
+            id: batt_table
+            align: LV_ALIGN_BOTTOM_MID
+            y: -10
+            width: lv_pct(95)
+            height: 320  # підбери під екран, можна динамічно
+            bg_color: 0x111111
+            bg_opa: LV_OPA_COVER
+            border_width: 1
+            border_color: 0x003366
+            radius: 15
+            pad_all: 8
 
-        - label:
-            id: battery_temp_label
-            align: LV_ALIGN_TOP_MID
-            y: 170
-            text_font: roboto15_cyrillic
-            text_color: 0xFFFFFF
-            text: !lambda |-
-              char buf[20];
-              snprintf(buf, sizeof(buf), "Темп: %.1f °C", id(battery_temp));
-              return buf;
+            # Ініціалізація (create) - виконується один раз при завантаженні
+            create:
+              - lv_table_set_col_cnt: 7
+              - lv_table_set_row_cnt: 17  # max 1 header + 16 батарей
+              - lv_table_set_col_width: [0, 40]   # #
+              - lv_table_set_col_width: [1, 60]   # SOC
+              - lv_table_set_col_width: [2, 80]   # State
+              - lv_table_set_col_width: [3, 70]   # V
+              - lv_table_set_col_width: [4, 70]   # A
+              - lv_table_set_col_width: [5, 80]   # Cycles
+              - lv_table_set_col_width: [6, 70]   # Temp
 
-        - label:
-            id: battery_status_label
-            align: LV_ALIGN_TOP_MID
-            y: 200
-            text_font: roboto15_cyrillic
-            text_color: !lambda 'return id(battery_soc).state > 0 ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
-            text: !lambda 'return id(battery_status).state.c_str();'
+              # Заголовки
+              - lv_table_set_cell_value: [0, 0, "#"]
+              - lv_table_set_cell_value: [0, 1, "SOC %"]
+              - lv_table_set_cell_value: [0, 2, "State"]
+              - lv_table_set_cell_value: [0, 3, "V (V)"]
+              - lv_table_set_cell_value: [0, 4, "A (A)"]
+              - lv_table_set_cell_value: [0, 5, "Cycles"]
+              - lv_table_set_cell_value: [0, 6, "Temp °C"]
 
+        # ==================== Оновлення таблиці (викликається після кожного парсингу) ====================
+        - lambda:
+            id: lvgl_update_table
+            lambda: |-
+              auto& data = id(bat_data);
+              int count = id(module_count);
+              if (count == 0) return;  // ще немає даних
+
+              lv_table_set_row_cnt(id(batt_table), count + 1);  // header + батареї
+
+              char buf[32];
+              for (int i = 0; i < count; i++) {
+                int row = i + 1;
+
+                std::istringstream iss(data[i]);
+                std::string field;
+                std::vector<std::string> fields;
+                while (std::getline(iss, field, ',')) {
+                  fields.push_back(field);
+                }
+
+                if (fields.size() >= 7) {
+                  // # (модуль)
+                  lv_table_set_cell_value(id(batt_table), row, 0, fields[0].c_str());
+
+                  // SOC %
+                  lv_table_set_cell_value(id(batt_table), row, 1, fields[5].c_str());  // mod[8] з прикладу
+
+                  // State
+                  lv_table_set_cell_value(id(batt_table), row, 2, fields[4].c_str());
+
+                  // V (перетворимо mV -> V якщо потрібно)
+                  float v = std::stof(fields[1]) / 1000.0;
+                  snprintf(buf, sizeof(buf), "%.2f", v);
+                  lv_table_set_cell_value(id(batt_table), row, 3, buf);
+
+                  // A
+                  float a = std::stof(fields[2]) / 1000.0;
+                  snprintf(buf, sizeof(buf), "%.2f", a);
+                  lv_table_set_cell_value(id(batt_table), row, 4, buf);
+
+                  // Cycles (з globals, якщо однакові для всіх, або per-module)
+                  snprintf(buf, sizeof(buf), "%d", id(cycles_soh)[0]);
+                  lv_table_set_cell_value(id(batt_table), row, 5, buf);
+
+                  // Temp
+                  float t = std::stof(fields[3]) / 1000.0;  // якщо в m°C
+                  snprintf(buf, sizeof(buf), "%.1f", t);
+                  lv_table_set_cell_value(id(batt_table), row, 6, buf);
+                }
+              }
+
+        # ==================== Кнопка оновлення (адаптуй під uartex) ====================
         - button:
             height: $button_height_single
             width: $button_width
@@ -118,118 +165,18 @@ lvgl:
                   text: $battery
               - label:
                   align: LV_ALIGN_BOTTOM_LEFT
-                  text: "Оновити батарею"
+                  text: "Оновити Pylontech"
                   text_font: roboto15_cyrillic
             on_click:
-              - component.update: my_pylontech
+              - uartex.write:
+                  id: pyl_uartex
+                  data: "bat"
+              - delay: 3s
+              - uartex.write:
+                  id: pyl_uartex
+                  data: "stat"
 
-        # ==================== ТАБЛИЦЯ БАТАРЕЙ ====================
-        - obj:
-            id: battery_table_container
-            align: LV_ALIGN_BOTTOM_MID
-            y: -10
-            width: 300
-            height: 280
-            bg_color: 0x111111
-            bg_opa: LV_OPA_COVER
-            border_width: 1
-            border_side: LV_BORDER_SIDE_RIGHT
-            border_color: 0x003366
-            radius: 15
-            pad_all: 8
-            layout:
-              type: grid
-              grid_columns: [20, 30, 50, 20, 30, 30, 120]
-              grid_rows: [35, 40]
-            widgets:
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "#"
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "SOC"
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "State"
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "V"
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "A"
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "Cycles"
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "Temp"
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: "Стек"
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: !lambda |-
-                    char buf[10];
-                    snprintf(buf, sizeof(buf), "%.0f%%", id(battery_soc).state);
-                    return buf;
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: !lambda 'return id(battery_status)->state.c_str();'
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: !lambda |-
-                    char buf[10];
-                    snprintf(buf, sizeof(buf), "%.2f", id(battery_voltage).state);
-                    return buf;
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: !lambda |-
-                    char buf[10];
-                    snprintf(buf, sizeof(buf), "%.2f", id(battery_current).state);
-                    return buf;
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: !lambda |-
-                    char buf[10];
-                    snprintf(buf, sizeof(buf), "%.0f", id(battery_cycles).state);
-                    return buf;
-              - label:
-                  text_font: roboto12_cyrillic
-                  text_color: 0xFFFFFF
-                  text_align: LV_TEXT_ALIGN_CENTER
-                  text: !lambda |-
-                    char buf[20];
-                    snprintf(buf, sizeof(buf), "%.1f °C", id(battery_temp).state);
-                    return buf;
-                    
-        # ==================== КНОПКИ ====================
-
+        # ==================== Інші елементи (коридорне світло тощо) ====================
         - button:
             height: $button_height_single
             width: $button_width
@@ -247,7 +194,7 @@ lvgl:
                   id: battery_rack_label
                   text: "Battery Rack Light"
             on_click:
-                - homeassistant.service:
-                    service: light.toggle
-                    data:
-                      entity_id: light.corridor_light             
+              - homeassistant.service:
+                  service: light.toggle
+                  data:
+                    entity_id: light.corridor_light
