@@ -228,24 +228,7 @@ lvgl:
                     snprintf(buf, sizeof(buf), "%.1f °C", id(battery_temp).state);
                     return buf;
                     
-        # ==================== ІСНУЮЧІ КНОПКИ ====================
-        - button:
-            height: $button_height_single
-            width: $button_width
-            checkable: true
-            id: office_aircon_button
-            styles: control
-            widgets:
-              - label:
-                  text_font: $icon_font
-                  align: LV_ALIGN_TOP_LEFT
-                  text: $aircon
-              - label:
-                  align: LV_ALIGN_BOTTOM_LEFT
-                  text: "Aircon"
-            on_click:
-              - homeassistant.service:
-                  service: script.office_air_conditioner
+        # ==================== КНОПКИ ====================
 
         - button:
             height: $button_height_single
