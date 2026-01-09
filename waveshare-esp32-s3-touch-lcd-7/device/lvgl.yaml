@@ -37,6 +37,7 @@ lvgl:
       pad_right: 5
 
       widgets:
+        # ARC + основні дані для першої/середньої батареї
         - arc:
             id: battery_arc
             align: LV_ALIGN_TOP_MID
@@ -45,7 +46,7 @@ lvgl:
             rotation: 135
             min_value: 0
             max_value: 100
-            value: !lambda 'return (int16_t) round(id(bat_soc)[0]);'  # SOC першої або середнє
+            value: !lambda 'return (int16_t) round(id(bat_soc)[0]);'  # або середнє по всім
             bg_color: 0x222222
             bg_opa: LV_OPA_COVER
             line_width: 35
@@ -64,44 +65,140 @@ lvgl:
               snprintf(buf, sizeof(buf), "%.0f%%", id(bat_soc)[0]);
               return buf;
 
-        # Контейнер для таблиці (тільки контейнер, без lambda тут!)
+        # Таблиця через grid + фіксовані labels (header + 16 рядків)
         - container:
-            id: batt_table_container
-            # ...
+            id: battery_table_container
+            align: LV_ALIGN_BOTTOM_MID
+            y: -10
+            width: lv_pct(95)
+            height: 320
+            bg_color: 0x111111
+            bg_opa: LV_OPA_COVER
+            border_width: 1
+            border_color: 0x003366
+            radius: 15
+            pad_all: 8
             layout:
               type: grid
-              grid_column_dsc: [lv_pct(10), lv_pct(15), lv_pct(20), lv_pct(15), lv_pct(15), lv_pct(15), lv_pct(15)]
-              grid_row_dsc: [lv_pct(5)] * 17  # 17 рядків
-      
-        - lambda:
-            id: lvgl_update_table
-            lambda: |-
-              static lv_obj_t *labels[16][7] = {nullptr};
-              if (labels[0][0] == nullptr) {
-                // Створити 16x7 label-ів
-                for (int i = 0; i < 16; i++) {
-                  for (int j = 0; j < 7; j++) {
-                    labels[i][j] = lv_label_create(id(batt_table_container).obj);
-                    lv_obj_set_grid_cell(labels[i][j], LV_GRID_ALIGN_STRETCH, j, 1, LV_GRID_ALIGN_STRETCH, i+1, 1);
-                    lv_label_set_text(labels[i][j], "");
-                  }
-                }
-                // Заголовки (окремо)
-                // ...
+              grid_columns: [lv_pct(10), lv_pct(15), lv_pct(25), lv_pct(15), lv_pct(15), lv_pct(15), lv_pct(15)]
+              grid_rows: [lv_pct(6)] * 17  # header + 16 батарей
+
+            widgets:
+              # Заголовки (рядок 0)
+              - label:
+                  grid_column: 0
+                  grid_row: 0
+                  text_font: roboto12_cyrillic
+                  text_color: 0xFFFFFF
+                  text_align: LV_TEXT_ALIGN_CENTER
+                  text: "#"
+              - label:
+                  grid_column: 1
+                  grid_row: 0
+                  text_font: roboto12_cyrillic
+                  text_color: 0xFFFFFF
+                  text_align: LV_TEXT_ALIGN_CENTER
+                  text: "SOC"
+              - label:
+                  grid_column: 2
+                  grid_row: 0
+                  text_font: roboto12_cyrillic
+                  text_color: 0xFFFFFF
+                  text_align: LV_TEXT_ALIGN_CENTER
+                  text: "State"
+              - label:
+                  grid_column: 3
+                  grid_row: 0
+                  text_font: roboto12_cyrillic
+                  text_color: 0xFFFFFF
+                  text_align: LV_TEXT_ALIGN_CENTER
+                  text: "V"
+              - label:
+                  grid_column: 4
+                  grid_row: 0
+                  text_font: roboto12_cyrillic
+                  text_color: 0xFFFFFF
+                  text_align: LV_TEXT_ALIGN_CENTER
+                  text: "A"
+              - label:
+                  grid_column: 5
+                  grid_row: 0
+                  text_font: roboto12_cyrillic
+                  text_color: 0xFFFFFF
+                  text_align: LV_TEXT_ALIGN_CENTER
+                  text: "Cycles"
+              - label:
+                  grid_column: 6
+                  grid_row: 0
+                  text_font: roboto12_cyrillic
+                  text_color: 0xFFFFFF
+                  text_align: LV_TEXT_ALIGN_CENTER
+                  text: "Temp"
+
+              # Рядки для 16 батарей (1-16, grid_row: 1 to 16)
+              - label:
+                  id: row1_num
+                  grid_column: 0
+                  grid_row: 1
+                  text_font: roboto12_cyrillic
+                  text_color: 0xFFFFFF
+                  text_align: LV_TEXT_ALIGN_CENTER
+                  text: "1"
+              - label:
+                  id: row1_soc
+                  grid_column: 1
+                  grid_row: 1
+                  text_font: roboto12_cyrillic
+                  text_color: 0xFFFFFF
+                  text_align: LV_TEXT_ALIGN_CENTER
+                  text: "-"
+              # ... повторити для row1_state, row1_v, row1_a, row1_cycles, row1_temp (аналогічно для row2..row16)
+
+              # Повтори для інших рядків (це довго, тому в реальності створюй цикл в lambda або копіюй блок 16 разів з id row2_num тощо)
+
+  # Глобальний lambda для оновлення всіх label-ів таблиці
+  - lambda:
+      id: lvgl_update_table
+      lambda: |-
+        int count = id(module_count);
+        if (count == 0) return;
+
+        auto& data = id(bat_data);
+
+        // Оновлення рядків
+        for (int i = 0; i < 16; i++) {
+          bool visible = i < count;
+
+          // Приклад для рядка 1 (i=0)
+          if (i == 0) {
+            lv_obj_t *row_num = id(row1_num).obj;
+            lv_obj_t *row_soc = id(row1_soc).obj;
+            // ... інші labels рядка
+
+            if (visible) {
+              lv_obj_clear_flag(row_num, LV_OBJ_FLAG_HIDDEN);
+              lv_obj_clear_flag(row_soc, LV_OBJ_FLAG_HIDDEN);
+              // ... для всіх
+
+              // Заповнення з data[i]
+              std::istringstream iss(data[i]);
+              std::vector<std::string> fields;
+              std::string field;
+              while (std::getline(iss, field, ',')) fields.push_back(field);
+
+              if (fields.size() >= 7) {
+                lv_label_set_text(id(row1_num).obj, fields[0].c_str());
+                lv_label_set_text(id(row1_soc).obj, fields[5].c_str());
+                // ... інші поля з парсингом V/A/Temp як раніше
               }
-              int count = id(module_count);
-              for (int i = 0; i < 16; i++) {
-                bool visible = i < count;
-                for (int j = 0; j < 7; j++) {
-                  if (visible) {
-                    lv_obj_clear_flag(labels[i][j], LV_OBJ_FLAG_HIDDEN);
-                    // Заповнити текст з data[i]
-                  } else {
-                    lv_obj_add_flag(labels[i][j], LV_OBJ_FLAG_HIDDEN);
-                  }
-                }
-              }
-      
+            } else {
+              lv_obj_add_flag(row_num, LV_OBJ_FLAG_HIDDEN);
+              lv_obj_add_flag(row_soc, LV_OBJ_FLAG_HIDDEN);
+              // ... ховати всі labels рядка
+            }
+          }
+          // Повтори блок для i=1..15 з id row2_num тощо
+        }      
               # ==================== Кнопка оновлення (адаптуй під uartex) ====================
               - button:
                   height: $button_height_single
