@@ -45,7 +45,7 @@ lvgl:
             rotation: 135
             min_value: 0
             max_value: 100
-            value: !lambda 'return (int16_t) round(id(bat_soc)[0]);'
+            value: !lambda 'return (int16_t) round(id(bat_soc)[0]);'  # SOC першої або середнє
             bg_color: 0x222222
             bg_opa: LV_OPA_COVER
             line_width: 35
@@ -64,12 +64,13 @@ lvgl:
               snprintf(buf, sizeof(buf), "%.0f%%", id(bat_soc)[0]);
               return buf;
 
+        # Контейнер для таблиці (тільки контейнер, без lambda тут!)
         - container:
             id: batt_table_container
             align: LV_ALIGN_BOTTOM_MID
             y: -10
             width: lv_pct(95)
-            height: 320
+            height: 320  # підбери під висоту екрану
             bg_color: 0x111111
             bg_opa: LV_OPA_COVER
             border_width: 1
@@ -78,59 +79,75 @@ lvgl:
             pad_all: 8
             scrollable: true
 
-        - lambda:
-            id: lvgl_update_table
-            lambda: |-
-              static lv_obj_t *table = nullptr;
-              if (table == nullptr) {
-                table = lv_table_create(id(batt_table_container).obj);
-                lv_obj_set_size(table, lv_pct(100), lv_pct(100));
-                lv_obj_center(table);
-                lv_table_set_col_cnt(table, 7);
-                lv_table_set_col_width(table, 0, 40);
-                lv_table_set_col_width(table, 1, 60);
-                lv_table_set_col_width(table, 2, 80);
-                lv_table_set_col_width(table, 3, 70);
-                lv_table_set_col_width(table, 4, 70);
-                lv_table_set_col_width(table, 5, 80);
-                lv_table_set_col_width(table, 6, 70);
-                lv_table_set_cell_value(table, 0, 0, "#");
-                lv_table_set_cell_value(table, 0, 1, "SOC %");
-                lv_table_set_cell_value(table, 0, 2, "State");
-                lv_table_set_cell_value(table, 0, 3, "V (V)");
-                lv_table_set_cell_value(table, 0, 4, "A (A)");
-                lv_table_set_cell_value(table, 0, 5, "Cycles");
-                lv_table_set_cell_value(table, 0, 6, "Temp °C");
-              }
-              auto& data = id(bat_data);
-              int count = id(module_count);
-              if (count == 0) return;
-              lv_table_set_row_cnt(table, count + 1);
-              char buf[32];
-              for (int i = 0; i < count; i++) {
-                int row = i + 1;
-                std::istringstream iss(data[i]);
-                std::string field;
-                std::vector<std::string> fields;
-                while (std::getline(iss, field, ',')) fields.push_back(field);
-                if (fields.size() >= 7) {
-                  lv_table_set_cell_value(table, row, 0, fields[0].c_str());
-                  lv_table_set_cell_value(table, row, 1, fields[5].c_str());
-                  lv_table_set_cell_value(table, row, 2, fields[4].c_str());
-                  float v = std::stof(fields[1]) / 1000.0;
-                  snprintf(buf, sizeof(buf), "%.2f", v);
-                  lv_table_set_cell_value(table, row, 3, buf);
-                  float a = std::stof(fields[2]) / 1000.0;
-                  snprintf(buf, sizeof(buf), "%.2f", a);
-                  lv_table_set_cell_value(table, row, 4, buf);
-                  snprintf(buf, sizeof(buf), "%d", id(cycles_soh)[0]);
-                  lv_table_set_cell_value(table, row, 5, buf);
-                  float t = std::stof(fields[3]) / 1000.0;
-                  snprintf(buf, sizeof(buf), "%.1f", t);
-                  lv_table_set_cell_value(table, row, 6, buf);
-                }
-              }
-              lv_obj_invalidate(table);
+# Окремий глобальний lambda для створення та оновлення таблиці (не в widgets!)
+  - lambda:
+      id: lvgl_update_table
+      lambda: |-
+        static lv_obj_t *table = nullptr;
+
+        if (table == nullptr) {
+          // Створюємо таблицю один раз (в контейнері)
+          lv_obj_t *parent = id(batt_table_container).obj;
+          table = lv_table_create(parent);
+          lv_obj_set_size(table, lv_pct(100), lv_pct(100));
+          lv_obj_center(table);
+
+          lv_table_set_col_cnt(table, 7);
+          lv_table_set_col_width(table, 0, 40);  // #
+          lv_table_set_col_width(table, 1, 60);  // SOC
+          lv_table_set_col_width(table, 2, 80);  // State
+          lv_table_set_col_width(table, 3, 70);  // V
+          lv_table_set_col_width(table, 4, 70);  // A
+          lv_table_set_col_width(table, 5, 80);  // Cycles
+          lv_table_set_col_width(table, 6, 70);  // Temp
+
+          lv_table_set_cell_value(table, 0, 0, "#");
+          lv_table_set_cell_value(table, 0, 1, "SOC %");
+          lv_table_set_cell_value(table, 0, 2, "State");
+          lv_table_set_cell_value(table, 0, 3, "V (V)");
+          lv_table_set_cell_value(table, 0, 4, "A (A)");
+          lv_table_set_cell_value(table, 0, 5, "Cycles");
+          lv_table_set_cell_value(table, 0, 6, "Temp °C");
+        }
+
+        auto& data = id(bat_data);
+        int count = id(module_count);
+        if (count == 0) return;
+
+        lv_table_set_row_cnt(table, count + 1);
+
+        char buf[32];
+        for (int i = 0; i < count; i++) {
+          int row = i + 1;
+
+          std::istringstream iss(data[i]);
+          std::string field;
+          std::vector<std::string> fields;
+          while (std::getline(iss, field, ',')) fields.push_back(field);
+
+          if (fields.size() >= 7) {
+            lv_table_set_cell_value(table, row, 0, fields[0].c_str());  // #
+            lv_table_set_cell_value(table, row, 1, fields[5].c_str());  // SOC (з mod[8])
+            lv_table_set_cell_value(table, row, 2, fields[4].c_str());  // State
+
+            float v = std::stof(fields[1]) / 1000.0;  // mV → V
+            snprintf(buf, sizeof(buf), "%.2f", v);
+            lv_table_set_cell_value(table, row, 3, buf);
+
+            float a = std::stof(fields[2]) / 1000.0;  // mA → A
+            snprintf(buf, sizeof(buf), "%.2f", a);
+            lv_table_set_cell_value(table, row, 4, buf);
+
+            snprintf(buf, sizeof(buf), "%d", id(cycles_soh)[0]);
+            lv_table_set_cell_value(table, row, 5, buf);
+
+            float t = std::stof(fields[3]) / 1000.0;  // якщо temp в m°C
+            snprintf(buf, sizeof(buf), "%.1f", t);
+            lv_table_set_cell_value(table, row, 6, buf);
+          }
+        }
+
+        lv_obj_invalidate(table);  // пере-малювати екран
 
         # ==================== Кнопка оновлення (адаптуй під uartex) ====================
         - button:
