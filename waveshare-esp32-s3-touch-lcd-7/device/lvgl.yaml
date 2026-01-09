@@ -234,8 +234,6 @@ lvgl:
             height: $button_height_single
             width: $button_width
             checkable: true
-            border_width: 3
-            border_color: 0xFF0000
             id: battery_rack_light
             styles: control
             widgets:
