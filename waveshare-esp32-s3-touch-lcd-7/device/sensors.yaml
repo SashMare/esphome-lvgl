@@ -21,14 +21,14 @@ sensor:
             format: "%d° / %d°"
             args: [ '(int)round(x)', '(int)round(id(outdoor_temperature).state)' ]
 
-  # Battery Rack
+binary_sensor:
   - platform: homeassistant
     id: corridor_light_state
     entity_id: light.corridor_light
     publish_initial_state: true
+#    internal: true
     on_state:
-      then:
-        lvgl.widget.update:
+      - lvgl.widget.update:
           id: battery_rack_light
           state:
-            checked: !lambda return x;
+            checked: !lambda 'return x;'
