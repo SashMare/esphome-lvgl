@@ -39,9 +39,6 @@ esphome:
 ota:
   platform: esphome
 
-# Enable Home Assistant API
-api:
-
 # Enable logging
 logger:
 
