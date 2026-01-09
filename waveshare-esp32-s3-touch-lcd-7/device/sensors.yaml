@@ -21,21 +21,6 @@ sensor:
             format: "%d° / %d°"
             args: [ '(int)round(x)', '(int)round(id(outdoor_temperature).state)' ]
 
-
-binary_sensor:
-  # Office Aircon
-  - platform: homeassistant
-    id: office_air_conditioner
-    entity_id: switch.office_air_conditioner
-    trigger_on_initial_state: true
-    on_state:
-      then:
-        lvgl.widget.update:
-          id: office_aircon_button
-          state:
-            checked: !lambda return x;
-
-
   # Battery Rack
   - platform: homeassistant
     id: corridor_light_state
